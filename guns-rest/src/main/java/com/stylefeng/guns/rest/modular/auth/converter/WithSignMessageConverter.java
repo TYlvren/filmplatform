@@ -5,11 +5,10 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.core.util.MD5Util;
-import com.stylefeng.guns.gateway.common.exception.BizExceptionEnum;
-import com.stylefeng.guns.gateway.config.properties.JwtProperties;
-import com.stylefeng.guns.gateway.modular.auth.converter.BaseTransferEntity;
-import com.stylefeng.guns.gateway.modular.auth.security.DataSecurityAction;
-import com.stylefeng.guns.gateway.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
+import com.stylefeng.guns.rest.config.properties.JwtProperties;
+import com.stylefeng.guns.rest.modular.auth.security.DataSecurityAction;
+import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -39,10 +38,10 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 
         InputStream in = inputMessage.getBody();
-        Object o = JSON.parseObject(in, super.getFastJsonConfig().getCharset(), com.stylefeng.guns.gateway.modular.auth.converter.BaseTransferEntity.class, super.getFastJsonConfig().getFeatures());
+        Object o = JSON.parseObject(in, super.getFastJsonConfig().getCharset(), com.stylefeng.guns.rest.modular.auth.converter.BaseTransferEntity.class, super.getFastJsonConfig().getFeatures());
 
         //先转化成原始的对象
-        com.stylefeng.guns.gateway.modular.auth.converter.BaseTransferEntity baseTransferEntity = (BaseTransferEntity) o;
+        com.stylefeng.guns.rest.modular.auth.converter.BaseTransferEntity baseTransferEntity = (BaseTransferEntity) o;
 
         //校验签名
         String token = HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7);

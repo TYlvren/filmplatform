@@ -27,6 +27,10 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
 
 spring:
+  application:
+    name: gateway-dubbo-spring-boot-starter
+    registry: zookeeper://localhost:2181
+
   datasource:
       url: jdbc:mysql://127.0.0.1:3306/guns_rest?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
       username: root

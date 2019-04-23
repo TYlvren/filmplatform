@@ -142,7 +142,7 @@ public class ShiroConfig {
          * 覆盖默认的user拦截器(默认拦截器解决不了ajax请求 session超时的问题,若有更好的办法请及时反馈作者)
          */
         HashMap<String, Filter> myFilters = new HashMap<>();
-        myFilters.put("user", new GunsUserFilter());
+        myFilters.put("rest", new GunsUserFilter());
         shiroFilter.setFilters(myFilters);
 
         /**
@@ -150,7 +150,7 @@ public class ShiroConfig {
          *
          * anon  不需要认证
          * authc 需要认证
-         * user  验证通过或RememberMe登录的都可以
+         * rest  验证通过或RememberMe登录的都可以
          *
          * 当应用开启了rememberMe时,用户下次访问时可以是一个user,但不会是authc,因为authc是需要重新认证的
          *
@@ -162,7 +162,7 @@ public class ShiroConfig {
         hashMap.put("/login", "anon");
         hashMap.put("/global/sessionError", "anon");
         hashMap.put("/kaptcha", "anon");
-        hashMap.put("/**", "user");
+        hashMap.put("/**", "rest");
         shiroFilter.setFilterChainDefinitionMap(hashMap);
         return shiroFilter;
     }

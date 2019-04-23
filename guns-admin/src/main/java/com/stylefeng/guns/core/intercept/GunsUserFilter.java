@@ -29,11 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Filter that allows access to resources if the accessor is a known user, which is defined as
- * having a known principal.  This means that any user who is authenticated or remembered via a
+ * Filter that allows access to resources if the accessor is a known rest, which is defined as
+ * having a known principal.  This means that any rest who is authenticated or remembered via a
  * 'remember me' feature will be allowed access from this filter.
  * <p/>
- * If the accessor is not a known user, then they will be redirected to the {@link #setLoginUrl(String) loginUrl}</p>
+ * If the accessor is not a known rest, then they will be redirected to the {@link #setLoginUrl(String) loginUrl}</p>
  *
  * @since 0.9
  */
@@ -55,7 +55,7 @@ public class GunsUserFilter extends AccessControlFilter {
             return true;
         } else {
             Subject subject = getSubject(request, response);
-            // If principal is not null, then the user is known and should be allowed access.
+            // If principal is not null, then the rest is known and should be allowed access.
             return subject.getPrincipal() != null;
         }
     }

@@ -48,7 +48,7 @@ import java.util.UUID;
 @RequestMapping("/mgr")
 public class UserMgrController extends BaseController {
 
-    private static String PREFIX = "/system/user/";
+    private static String PREFIX = "/system/rest/";
 
     @Autowired
     private GunsProperties gunsProperties;
@@ -61,7 +61,7 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("")
     public String index() {
-        return PREFIX + "user.html";
+        return PREFIX + "rest.html";
     }
 
     /**

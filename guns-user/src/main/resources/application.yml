@@ -8,9 +8,10 @@ jwt:
   expiration: 604800      #7天 单位:秒
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
+  ignore-url: /user/register,/user/login
 
 server:
-  port: 80 #项目端口
+  port: 8081 #项目端口
 
 mybatis-plus:
   mapper-locations: classpath*:com/stylefeng/guns/rest/**/mapping/*.xml
@@ -27,6 +28,13 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
 
 spring:
+  application:
+    name: rest-dubbo-spring-boot-starter
+  dubbo:
+    server: true
+    registry: zookeeper://localhost:2181
+    protocal: dubbo
+    port: 20881
   datasource:
       url: jdbc:mysql://127.0.0.1:3306/guns_rest?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
       username: root

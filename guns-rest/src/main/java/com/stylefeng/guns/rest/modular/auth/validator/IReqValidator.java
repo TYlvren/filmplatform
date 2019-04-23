@@ -1,6 +1,6 @@
 package com.stylefeng.guns.rest.modular.auth.validator;
 
-import com.stylefeng.guns.gateway.modular.auth.validator.dto.Credence;
+import com.stylefeng.guns.rest.modular.auth.validator.dto.Credence;
 
 /**
  * <p>验证请求/auth接口时,请求参数的正确性</p>

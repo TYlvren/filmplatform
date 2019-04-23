@@ -1,6 +1,5 @@
 package com.stylefeng.guns.rest;
 
-import com.stylefeng.guns.gateway.GunsRestApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
