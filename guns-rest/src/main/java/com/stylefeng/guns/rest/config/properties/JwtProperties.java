@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2017-08-23 9:23
  */
 @Configuration
-@ConfigurationProperties(prefix = JwtProperties.JWT_PREFIX)
+@ConfigurationProperties(prefix = com.stylefeng.guns.gateway.config.properties.JwtProperties.JWT_PREFIX)
 public class JwtProperties {
 
     public static final String JWT_PREFIX = "jwt";

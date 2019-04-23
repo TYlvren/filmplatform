@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2017年10月23日16:44:15
  */
 @Configuration
-@ConfigurationProperties(prefix = RestProperties.REST_PREFIX)
+@ConfigurationProperties(prefix = com.stylefeng.guns.gateway.config.properties.RestProperties.REST_PREFIX)
 public class RestProperties {
 
     public static final String REST_PREFIX = "rest";

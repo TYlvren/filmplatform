@@ -10,7 +10,7 @@ import com.alibaba.druid.pool.DruidDataSource;
  */
 public class MutiDataSourceProperties {
 
-    private String url = "jdbc:mysql://127.0.0.1:3306/biz?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull";
+    private String url = "jdbc:mysql://127.0.0.1:3306/biz?autoReconnect=true&useUnicode=true&characterEncoding=utf8";
 
     private String username = "root";
 
