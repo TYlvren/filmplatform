@@ -51,4 +51,26 @@ public class UserServiceImpl implements UserService {
         UserBO userBO = userMapper.selectUserByUsernameAndPassword(username, md5);
         return userBO != null;
     }
+
+    /**
+     * 通过用户名查找用户
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public UserBO findUser(String username) {
+        return userMapper.selectUserByUsername(username);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param userBO
+     * @return
+     */
+    @Override
+    public boolean updateUser(UserBO userBO) {
+        return userMapper.updateUser(userBO) == 1;
+    }
 }

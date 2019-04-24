@@ -33,4 +33,6 @@ public interface UserMapper {
 
 
     int insertUser(RequestUser requestUser);
+
+    int updateUser(UserBO userBO);
 }

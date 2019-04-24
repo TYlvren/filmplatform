@@ -2,9 +2,9 @@ package com.stylefeng.guns.rest.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.controller.dto.AuthResponse;
-import com.stylefeng.guns.rest.controller.dto.TakenVO;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.uservo.UserVO;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +40,7 @@ public class AuthController {
                     jedis.setex(username,1800, token);
                 }
 
-                return new TakenVO(0,new AuthResponse(token, randomKey));
+                return new UserVO(0,new AuthResponse(token, randomKey));
             } else {
                 return new StatusVO(1, "用户名或密码错误");
             }

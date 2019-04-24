@@ -6,17 +6,16 @@ public class UserBO {
 
     private int uuid;
     private String username;
-    private String password;
     private String nickname;
     private int sex;
     private Date birthday;
     private String email;
     private String phone;
     private String address;
-    private String headUrl;
+    private String headAddress;
     private String biography;
     private int lifeState;
-    private Date beginTime;
+    private Date createTime;
     private Date updateTime;
 
     public UserBO() {
@@ -38,13 +37,6 @@ public class UserBO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getNickname() {
         return nickname;
@@ -94,12 +86,12 @@ public class UserBO {
         this.address = address;
     }
 
-    public String getHeadUrl() {
-        return headUrl;
+    public String getHeadAddress() {
+        return headAddress;
     }
 
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
+    public void setHeadAddress(String headAddress) {
+        this.headAddress = headAddress;
     }
 
     public String getBiography() {
@@ -118,12 +110,12 @@ public class UserBO {
         this.lifeState = lifeState;
     }
 
-    public Date getBeginTime() {
-        return beginTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setBeginTime(Date beginTime) {
-        this.beginTime = beginTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getUpdateTime() {

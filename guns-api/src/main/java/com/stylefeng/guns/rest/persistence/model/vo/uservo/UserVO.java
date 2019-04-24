@@ -1,13 +1,13 @@
-package com.stylefeng.guns.rest.controller.dto;
+package com.stylefeng.guns.rest.persistence.model.vo.uservo;
 
-public class TakenVO {
+public class UserVO {
     private int status;
     private Object data;
 
-    public TakenVO() {
+    public UserVO() {
     }
 
-    public TakenVO(int status, Object data) {
+    public UserVO(int status, Object data) {
         this.status = status;
         this.data = data;
     }

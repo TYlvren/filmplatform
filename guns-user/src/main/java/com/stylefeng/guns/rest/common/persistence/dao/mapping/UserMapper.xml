@@ -4,9 +4,9 @@
 
 	<sql id="table">mtime_user_t</sql>
 	<sql id="userColumns">
-		  UUID as uuid,user_name as username,user_pwd as password,nick_name as nickname,
-		  user_sex as sex,birthday,email,user_phone as phone,address,head_url as headUrl,
-		  biography,life_state as lifeState,begin_time as beginTime,update_time as updateTime
+		  UUID as uuid,user_name as username,nick_name as nickname,
+		  user_sex as sex,birthday,email,user_phone as phone,address,head_url as headAddress,
+		  biography,life_state as lifeState,begin_time as createTime,update_time as updateTime
 	</sql>
 
 	<select id="selectUserByUsername" resultType="userbo">
@@ -30,7 +30,28 @@
 	<insert id="insertUser">
 		insert into
 		<include refid="table"/>
-		(user_name,user_pwd,email,user_phone,address)
-		value (#{username},#{password},#{email},#{phone},#{address})
+		(user_name,user_pwd,email,user_phone,address,begin_time)
+		value (#{username},#{password},#{email},#{phone},#{address},now())
 	</insert>
+
+	<update id="updateUser" parameterType="userbo">
+		<selectKey  order="AFTER" keyProperty="createTime" keyColumn="begin_time" resultType="date">
+			select begin_time from <include refid="table"/> where UUID = #{uuid};
+		</selectKey>
+		<selectKey  order="AFTER" keyProperty="updateTime" keyColumn="update_time" resultType="date">
+			select update_time from <include refid="table"/> where UUID = #{uuid};
+		</selectKey>
+		<selectKey  order="AFTER" keyProperty="headAddress" keyColumn="head_url" resultType="string">
+			select head_url from <include refid="table"/> where UUID = #{uuid};
+		</selectKey>
+
+		update
+		<include refid="table"/>
+		set
+		nick_name = #{nickname},user_sex = #{sex},birthday = #{birthday},email = #{email},
+		user_phone = #{phone},address = #{address},biography = #{biography},
+		life_state = #{lifeState},update_time = now()
+		where
+		UUID = #{uuid}
+	</update>
 </mapper>
