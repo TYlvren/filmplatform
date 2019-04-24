@@ -69,7 +69,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
                 String token = jedis.get(username);
                 if(!authToken.equals(token)){
-                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
+                    RenderUtil.renderJson(response,new ErrorTip(1, "操作失败，用户尚未登录"));
                     return;
                 }
 

@@ -2,8 +2,10 @@ package com.stylefeng.guns.rest.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
+import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.uservo.UserVO;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +65,11 @@ public class UserController {
     @Autowired
     private Jedis jedis;
 
+    /**
+     * 用户登出
+     * @param request
+     * @return
+     */
     @RequestMapping("logout")
     public StatusVO logout(HttpServletRequest request){
         String token = (String) request.getAttribute("token");
@@ -75,5 +82,39 @@ public class UserController {
         }else {
             return new StatusVO(999,"系统出现异常，请联系管理员");
         }
+    }
+
+    /**
+     * 查询已登录用户的信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("getUserInfo")
+    public UserVO getUserInfo(HttpServletRequest request){
+        String username = (String) request.getAttribute("username");
+        UserBO userBO = userService.findUser(username);
+        if(userBO == null){
+            return new UserVO(999,"系统出现异常，请联系管理员");
+        }
+        return new UserVO(0, userBO);
+    }
+
+    @RequestMapping(value = "updateUserInfo",method = RequestMethod.POST)
+    public Object updateUserInfo(UserBO userBO){
+
+        boolean update = false;
+        try {
+            update = userService.updateUser(userBO);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new UserVO(999,"系统出现异常，请联系管理员");
+        }
+
+        if(update){
+            return new UserVO(0,userBO);
+        }else {
+            return new StatusVO(1,"用户信息修改失败");
+        }
+
     }
 }
