@@ -47,7 +47,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean findUser(String username, String password) {
-        UserBO userBO = userMapper.selectUserByUsernameAndPassword(username, password);
+        String md5 = MD5Utils.getMD5(password);
+        UserBO userBO = userMapper.selectUserByUsernameAndPassword(username, md5);
         return userBO != null;
     }
 }
