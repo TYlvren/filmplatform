@@ -11,5 +11,11 @@
 
     <artifactId>guns-api</artifactId>
     <description>功能依赖子模块</description>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.6</version>
+        </dependency>
+    </dependencies>
 </project>
