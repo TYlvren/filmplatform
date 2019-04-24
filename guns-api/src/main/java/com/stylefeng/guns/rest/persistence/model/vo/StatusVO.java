@@ -1,10 +1,16 @@
-package com.stylefeng.guns.rest.utilBeans;
+package com.stylefeng.guns.rest.persistence.model.vo;
 
-public class StatusBean {
+public class StatusVO {
+
     private int status;
     private String msg;
 
-    public StatusBean() {
+    public StatusVO() {
+    }
+
+    public StatusVO(int status, String msg) {
+        this.status = status;
+        this.msg = msg;
     }
 
     public int getStatus() {

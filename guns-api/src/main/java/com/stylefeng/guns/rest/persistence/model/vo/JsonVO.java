@@ -1,6 +1,6 @@
-package com.stylefeng.guns.rest.utilBeans;
+package com.stylefeng.guns.rest.persistence.model.vo;
 
-public class JsonBean {
+public class JsonVO {
 
     private int status ;
     private int nowPage;
@@ -9,10 +9,10 @@ public class JsonBean {
     private Object data;
 
 
-    public JsonBean() {
+    public JsonVO() {
     }
 
-    public JsonBean(int status, int nowPage, int totalPage, Object data) {
+    public JsonVO(int status, int nowPage, int totalPage, Object data) {
         this.status = status;
         this.nowPage = nowPage;
         this.totalPage = totalPage;
@@ -50,5 +50,4 @@ public class JsonBean {
     public void setData(Object data) {
         this.data = data;
     }
-
 }
