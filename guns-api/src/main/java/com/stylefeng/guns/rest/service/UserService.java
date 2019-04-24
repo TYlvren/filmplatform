@@ -1,17 +1,24 @@
 package com.stylefeng.guns.rest.service;
 
-import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
 
 
 public interface UserService {
 
-    StatusVO register(UserBO userBO);
+    boolean register(RequestUser requestUser);
 
     /**
      * 通过用户名检查用户是否存在
      * @param username
      * @return
      */
-    StatusVO checkUser(String username);
+    boolean checkUser(String username);
+
+    /**
+     * 通过用户名和密码查找用户是否存在
+     * @param username
+     * @param password
+     * @return
+     */
+    boolean findUser(String username,String password);
 }

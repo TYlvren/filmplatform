@@ -3,7 +3,7 @@ package com.stylefeng.guns.rest.service;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.stylefeng.guns.rest.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
 import com.stylefeng.guns.rest.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,23 +16,13 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public StatusVO register(UserBO userBO) {
+    public boolean register(RequestUser requestUser) {
 
-        UserBO userByUsername = userMapper.selectUserByUsername(userBO.getUsername());
+        String password = MD5Utils.getMD5(requestUser.getPassword());
+        requestUser.setPassword(password);
 
-        if(userByUsername == null){
-            return new StatusVO(1,"用户已存在");
-        }
-
-        String password = MD5Utils.getMD5(userBO.getPassword());
-        userBO.setPassword(password);
-
-        int i = userMapper.insertUser(userBO);
-        if(i != 1 ){
-            return new StatusVO(999,"系统出现异常，请联系管理员");
-        }
-
-        return new StatusVO(0,"注册成功");
+        int i = userMapper.insertUser(requestUser);
+        return i == 1;
     }
 
     /**
@@ -42,14 +32,22 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public StatusVO checkUser(String username) {
+    public boolean checkUser(String username) {
 
         UserBO userByUsername = userMapper.selectUserByUsername(username);
+        return userByUsername == null;
+    }
 
-        if(userByUsername == null){
-            return new StatusVO(1,"用户已存在");
-        }else {
-            return new StatusVO(0,"验证成功");
-        }
+    /**
+     * 通过用户名和密码查找用户是否存在
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    public boolean findUser(String username, String password) {
+        UserBO userBO = userMapper.selectUserByUsernameAndPassword(username, password);
+        return userBO != null;
     }
 }

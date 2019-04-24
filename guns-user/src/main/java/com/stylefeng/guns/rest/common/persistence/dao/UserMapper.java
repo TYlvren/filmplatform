@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.common.persistence.dao;
 
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
+import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -31,5 +32,5 @@ public interface UserMapper {
     UserBO selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
 
 
-    int insertUser(UserBO userBO);
+    int insertUser(RequestUser requestUser);
 }
