@@ -56,6 +56,12 @@
             <artifactId>guns-api</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--Redis数据库-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -9,6 +9,7 @@ import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
 
 @RestController
 public class AuthController {
@@ -19,6 +20,10 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private Jedis jedis;
+
+
     @RequestMapping(value = "${jwt.auth-path}")
     public Object createAuthenticationToken(String username,String password) {
         try {
@@ -26,7 +31,14 @@ public class AuthController {
 
             if (validate) {
                 final String randomKey = jwtTokenUtil.getRandomKey();
-                final String token = jwtTokenUtil.generateToken(username, randomKey);
+                String token = jwtTokenUtil.generateToken(username, randomKey);
+
+                String get = jedis.get(username);
+                if(get != null){
+                   token = get;
+                }else {
+                    jedis.setex(username,1800, token);
+                }
 
                 return new TakenVO(0,new AuthResponse(token, randomKey));
             } else {

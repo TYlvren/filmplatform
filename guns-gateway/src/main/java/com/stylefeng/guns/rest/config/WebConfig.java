@@ -7,6 +7,9 @@ import com.stylefeng.guns.rest.modular.auth.security.impl.Base64SecurityAction;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * web配置
@@ -26,5 +29,27 @@ public class WebConfig {
     @Bean
     public DataSecurityAction dataSecurityAction() {
         return new Base64SecurityAction();
+    }
+
+    /**
+     * JedisPool
+     * @return
+     */
+    @Bean
+    public JedisPool jedisPool(){
+        return new JedisPool();
+    }
+
+    /**
+     * Jedis，索引为1的数据库，多例模式调用
+     * @param jedisPool
+     * @return
+     */
+    @Bean
+    @Scope("prototype")
+    public Jedis jedis(JedisPool jedisPool){
+        Jedis resource = jedisPool.getResource();
+        resource.select(1);
+        return resource;
     }
 }
