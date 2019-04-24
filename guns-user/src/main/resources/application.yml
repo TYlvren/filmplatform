@@ -27,7 +27,7 @@ mybatis-plus:
 
 spring:
   application:
-    name: rest-dubbo-spring-boot-starter
+    name: user-dubbo-spring-boot-starter
   dubbo:
     server: true
     registry: zookeeper://localhost:2181
