@@ -31,7 +31,7 @@ spring:
   dubbo:
     server: true
     registry: zookeeper://localhost:2181
-    protocal: dubbo
+    protocol: dubbo
     port: 20881
 
   datasource:
