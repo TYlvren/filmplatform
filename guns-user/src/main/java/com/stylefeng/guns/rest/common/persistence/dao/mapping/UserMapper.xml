@@ -27,6 +27,15 @@
 		user_name=#{username} and user_pwd=#{password}
 	</select>
 
+	<select id="selectUserByUUID" resultType="userbo">
+		select
+		<include refid="userColumns"/>
+		from
+		<include refid="table"/>
+		where
+		UUID = #{uuid}
+	</select>
+
 	<insert id="insertUser">
 		insert into
 		<include refid="table"/>
@@ -35,16 +44,6 @@
 	</insert>
 
 	<update id="updateUser" parameterType="userbo">
-		<!--<selectKey  order="AFTER" keyProperty="createTime" keyColumn="begin_time" resultType="date">
-			select begin_time from <include refid="table"/> where UUID = #{uuid};
-		</selectKey>
-		<selectKey  order="AFTER" keyProperty="updateTime" keyColumn="update_time" resultType="date">
-			select update_time from <include refid="table"/> where UUID = #{uuid};
-		</selectKey>
-		<selectKey  order="AFTER" keyProperty="headAddress" keyColumn="head_url" resultType="string">
-			select head_url from <include refid="table"/> where UUID = #{uuid};
-		</selectKey>-->
-
 		update
 		<include refid="table"/>
 		set

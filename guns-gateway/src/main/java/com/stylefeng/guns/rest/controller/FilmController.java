@@ -1,12 +1,10 @@
 package com.stylefeng.guns.rest.controller;
 
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.ResponseSearchFIlmVo;
-
 import com.stylefeng.guns.rest.service.FilmService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/film")
 public class FilmController {
 
-    @Reference
+    //@Reference
     FilmService filmService;
 
     @RequestMapping("getConditionList")

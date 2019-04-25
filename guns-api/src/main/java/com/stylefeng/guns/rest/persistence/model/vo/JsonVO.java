@@ -1,7 +1,10 @@
 package com.stylefeng.guns.rest.persistence.model.vo;
 
-public class JsonVO {
+import java.io.Serializable;
 
+public class JsonVO implements Serializable {
+
+    private static final long serialVersionUID = -1153570805905559717L;
     private int status ;
     private int nowPage;
     private int totalPage;

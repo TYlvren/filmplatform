@@ -1,6 +1,9 @@
 package com.stylefeng.guns.rest.persistence.model.request;
 
-public class RequestUser {
+import java.io.Serializable;
+
+public class RequestUser implements Serializable {
+    private static final long serialVersionUID = 1745650206849001917L;
     private String username;
     private String password;
     private String email;
