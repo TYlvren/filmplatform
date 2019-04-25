@@ -17,6 +17,7 @@
         <module>guns-gateway</module>
         <module>guns-api</module>
         <module>guns-film</module>
+        <module>guns-order</module>
     </modules>
 
     <parent>

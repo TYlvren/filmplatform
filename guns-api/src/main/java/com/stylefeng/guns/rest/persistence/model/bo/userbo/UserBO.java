@@ -1,8 +1,9 @@
 package com.stylefeng.guns.rest.persistence.model.bo.userbo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserBO {
+public class UserBO implements Serializable {
 
     private int uuid;
     private String username;

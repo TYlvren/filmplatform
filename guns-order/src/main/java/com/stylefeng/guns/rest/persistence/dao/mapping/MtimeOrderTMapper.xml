@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeOrderTMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeOrderT">
+        <result column="UUID" property="uuid" />
+        <result column="cinema_id" property="cinemaId" />
+        <result column="field_id" property="fieldId" />
+        <result column="film_id" property="filmId" />
+        <result column="seats_ids" property="seatsIds" />
+        <result column="seats_name" property="seatsName" />
+        <result column="film_price" property="filmPrice" />
+        <result column="order_price" property="orderPrice" />
+        <result column="order_time" property="orderTime" />
+        <result column="order_user" property="orderUser" />
+        <result column="order_status" property="orderStatus" />
+    </resultMap>
+    <select id="selectSeatsIdsByfiledId" resultType="string">
+      select seats_ids from mtime_order_t where
+      field_id=#{filedId} and (order_status=0 or order_status=1 )
+    </select>
+    <select id="searchOrdersByUserId" resultMap="BaseResultMap">
+      select * from mtime_order_t where
+      order_user=#{userId} order by order_time desc
+    </select>
+</mapper>
