@@ -13,4 +13,6 @@ public interface OrderService {
     ResponseOrderVo saveOrderInfo(int filedId, String soldSeats, String seatsName, UserBO userbo) throws Exception;
 
     List<ResponseOrderVo> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception;
+    String getSoldSeatsByFieldId(Integer filedId);
+
 }

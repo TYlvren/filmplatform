@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,15 +64,8 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public Boolean isSoldSeats(int filedId, String seatId) throws Exception{
-         List<String> saledSeats= mtimeOrderTMapper.selectSeatsIdsByfiledId(filedId);
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i=0;i<saledSeats.size();i++) {
-            if(i==0||i==saledSeats.size()-1)stringBuffer.append(saledSeats.get(i));
-            else {
-                stringBuffer.append(","+saledSeats.get(i));
-            }
-        }
-        String s = stringBuffer.toString();
+        String s = this.getSoldSeatsByFieldId(filedId);
+
         String[] seatIds = seatId.split(",");
         String[] soldSeatIds = s.split(",");
         for (String id : seatIds) {
@@ -89,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
         //String cinamaName= cinamaservice.getNameByfiledId(filedId)
         MtimeFieldT mtimeField=  mtimeFieldTMapper.searchByFiledId(filedId);
         Integer cinemaId = mtimeField.getCinemaId();
+
         //获取电影院名称
         responseOrderVo.setCinemaName("电影院名称查询接口");
 
@@ -100,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
         responseOrderVo.setFilmName("电影名称查询接口");
         //设置orderId为uuid
         UUID uuid = UUID.randomUUID();
-        responseOrderVo.setOrderId( uuid.toString());
+        responseOrderVo.setOrderId( uuid.toString().replace("-",""));
 
         //票的价格从哪拿？？是否需要计算总数
          double perprice=  (double)mtimeField.getPrice();
@@ -113,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         Date date = new Date();
         responseOrderVo.setOrderTimestamp( df.format(date));
 
-
+        responseOrderVo.setOrderStatus("未支付");
         responseOrderVo.setSeatsName(seatsName);
         MtimeOrderT mtimeOrderT = new MtimeOrderT();
         mtimeOrderT.setUuid(uuid.toString());
@@ -134,10 +129,40 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ResponseOrderVo> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception{
         //需要分页！！！！！！！
-         List<MtimeOrderT> mtimeOrderTList=mtimeOrderTMapper.searchOrdersByUserId(userId);
+        List<ResponseOrderVo> responseOrderVos=mtimeOrderTMapper.searchResponseOrdersByUserId(userId);
+        for (ResponseOrderVo responseOrderVo : responseOrderVos) {
+            String orderStatus = responseOrderVo.getOrderStatus();
+            switch (orderStatus){
+                case "0" :{
+                    responseOrderVo.setOrderStatus("待支付");
+                    break;
+                }
+                case "1" :{
+                    responseOrderVo.setOrderStatus("已支付");
+                    break;
+                }
+                case "2" :{
+                    responseOrderVo.setOrderStatus("已关闭");
+                    break;
+                }
+            }
+        }
+        return responseOrderVos;
+    }
 
+    @Override
+    public String getSoldSeatsByFieldId(Integer filedId) {
+        List<String> saledSeats= mtimeOrderTMapper.selectSeatsIdsByfiledId(filedId);
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i=0;i<saledSeats.size();i++) {
+            if(i==0)stringBuffer.append(saledSeats.get(i)+",");
+            else if(i==(saledSeats.size()-1))stringBuffer.append(saledSeats.get(i));
+            else {
+                stringBuffer.append(saledSeats.get(i)+",");
+            }
+        }
+        String s = stringBuffer.toString();
 
-
-        return null;
+        return s;
     }
 }

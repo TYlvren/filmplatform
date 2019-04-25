@@ -33,4 +33,5 @@ public class ResponseOrderVo implements Serializable {
     private String seatsName;
     private Double orderPrice;
     private String orderTimestamp;
+    private String orderStatus;
 }
