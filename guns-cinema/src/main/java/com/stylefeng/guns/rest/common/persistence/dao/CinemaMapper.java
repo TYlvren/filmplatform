@@ -1,7 +1,8 @@
 package com.stylefeng.guns.rest.common.persistence.dao;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.cskaoyan.filmplatform.cinema.common.persistence.model.Cinema;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.CinemaBO;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.CinemaInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,11 +28,10 @@ public interface CinemaMapper  { //extends BaseMapper<Cinema> 继承BaseMapper�
      * @param page 分页对象,xml中可以从里面进行取值,传递参数 Page 即自动分页,必须放在第一位(你可以继承Page实现自己的分页对象)
      * @return 分页对象
      */
-    List<Cinema> selectCinemaByBrandIdAndAreaIdAndHallType(Page page,
-                                                           @Param("brandId") int brandId,
-                                                           @Param("areaId") int areaId,
-                                                           @Param("hallType") int hallType);
+    List<CinemaBO> selectCinemaByBrandIdAndAreaIdAndHallType(Page page,
+                                                             @Param("brandId") int brandId,
+                                                             @Param("areaId") int areaId,
+                                                             @Param("hallType") int hallType);
 
-
-
+    CinemaInfo selectCinemaByUUID(Integer cinemaId);
 }

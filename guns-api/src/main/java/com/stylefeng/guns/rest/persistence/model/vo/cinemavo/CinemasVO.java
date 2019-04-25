@@ -1,8 +1,8 @@
-package com.stylefeng.guns.rest.persistence.model.vo;
+package com.stylefeng.guns.rest.persistence.model.vo.cinemavo;
 
 import java.io.Serializable;
 
-public class JsonVO implements Serializable {
+public class CinemasVO implements Serializable {
 
     private static final long serialVersionUID = -1153570805905559717L;
     private int status ;
@@ -12,10 +12,10 @@ public class JsonVO implements Serializable {
     private Object data;
 
 
-    public JsonVO() {
+    public CinemasVO() {
     }
 
-    public JsonVO(int status, int nowPage, int totalPage, Object data) {
+    public CinemasVO(int status, int nowPage, int totalPage, Object data) {
         this.status = status;
         this.nowPage = nowPage;
         this.totalPage = totalPage;

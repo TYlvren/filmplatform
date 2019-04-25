@@ -2,16 +2,16 @@ package com.stylefeng.guns.rest.persistence.model.vo;
 
 import java.io.Serializable;
 
-public class StatusVO implements Serializable {
+public class StatusMsgVO implements Serializable {
 
     private static final long serialVersionUID = -3439842550822596019L;
     private int status;
     private String msg;
 
-    public StatusVO() {
+    public StatusMsgVO() {
     }
 
-    public StatusVO(int status, String msg) {
+    public StatusMsgVO(int status, String msg) {
         this.status = status;
         this.msg = msg;
     }

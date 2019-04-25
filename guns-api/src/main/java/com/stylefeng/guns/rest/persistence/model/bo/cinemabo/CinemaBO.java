@@ -1,6 +1,10 @@
 package com.stylefeng.guns.rest.persistence.model.bo.cinemabo;
 
-public class CinemaBO {
+import java.io.Serializable;
+
+public class CinemaBO implements Serializable {
+
+    private static final long serialVersionUID = -512069946937585226L;
 
     private int uuid;
     private String cinemaName;
