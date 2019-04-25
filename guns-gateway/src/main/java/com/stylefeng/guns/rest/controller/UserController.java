@@ -72,8 +72,10 @@ public class UserController {
      */
     @RequestMapping("logout")
     public StatusVO logout(HttpServletRequest request){
-        String token = (String) request.getAttribute("token");
         String username = (String) request.getAttribute("username");
+        if(username == null || "".equals(username)){
+            return new StatusVO(1,"退出失败，用户尚未登陆");
+        }
         Long del = jedis.del(username);
         if(del == 1){
             return new StatusVO(0,"成功退出");
@@ -99,12 +101,18 @@ public class UserController {
         return new UserVO(0, userBO);
     }
 
+    /**
+     * 修改用户信息
+     * @param userBO
+     * @return
+     */
     @RequestMapping(value = "updateUserInfo",method = RequestMethod.POST)
     public Object updateUserInfo(UserBO userBO){
 
         boolean update = false;
         try {
             update = userService.updateUser(userBO);
+            userBO = userService.findUser(userBO.getUuid());
         }catch (Exception e){
             e.printStackTrace();
             return new UserVO(999,"系统出现异常，请联系管理员");

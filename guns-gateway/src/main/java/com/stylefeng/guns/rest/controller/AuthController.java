@@ -25,19 +25,19 @@ public class AuthController {
 
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public Object createAuthenticationToken(String username,String password) {
+    public Object createAuthenticationToken(String userName,String password) {
         try {
-            boolean validate = userService.findUser(username,password);
+            boolean validate = userService.findUser(userName,password);
 
             if (validate) {
                 final String randomKey = jwtTokenUtil.getRandomKey();
-                String token = jwtTokenUtil.generateToken(username, randomKey);
+                String token = jwtTokenUtil.generateToken(userName, randomKey);
 
-                String get = jedis.get(username);
+                String get = jedis.get(userName);
                 if(get != null){
                    token = get;
                 }else {
-                    jedis.setex(username,1800, token);
+                    jedis.setex(userName,1800, token);
                 }
 
                 return new UserVO(0,new AuthResponse(token, randomKey));

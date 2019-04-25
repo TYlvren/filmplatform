@@ -1,6 +1,10 @@
 package com.stylefeng.guns.rest.persistence.model.vo.uservo;
 
-public class UserVO {
+import java.io.Serializable;
+
+public class UserVO implements Serializable {
+    private static final long serialVersionUID = -7828560198639826925L;
+
     private int status;
     private Object data;
 

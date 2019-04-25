@@ -36,4 +36,11 @@ public interface UserService {
      * @return
      */
     boolean updateUser(UserBO userBO);
+
+    /**
+     * 通过UUID查找用户
+     * @param uuid
+     * @return
+     */
+    UserBO findUser(int uuid);
 }
