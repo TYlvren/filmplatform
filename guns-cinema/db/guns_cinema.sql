@@ -135,7 +135,7 @@ CREATE TABLE mtime_cinema_t(
   hall_ids VARCHAR(200) COMMENT '包含的影厅类型,以#作为分割',
   img_address VARCHAR(500) COMMENT '影院图片地址',
   cinema_address VARCHAR(200) COMMENT '影院地址',
-  minimum_price INT DEFAULT 0 COMMENT '最低票价'
+  minimum_price FLOAT DEFAULT 0 COMMENT '最低票价'
 ) COMMENT '影院信息表' ENGINE = INNODB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 

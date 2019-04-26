@@ -3,9 +3,10 @@ package com.stylefeng.guns.rest.persistence.service.impl;
 
 
 import com.alibaba.dubbo.config.annotation.Service;
+
 import com.stylefeng.guns.rest.persistence.dao.*;
-import com.stylefeng.guns.rest.persistence.model.MtimeFilmInfoT;
-import com.stylefeng.guns.rest.persistence.model.MtimeFilmT;
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.MtimeFilmInfoT;
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.MtimeFilmT;
 import com.stylefeng.guns.rest.persistence.model.bo.filmBo.*;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.*;
 import com.stylefeng.guns.rest.service.FilmService;
@@ -37,6 +38,8 @@ public class FilmServiceImpl implements FilmService {
     MtimeFilmInfoTMapper mtimeFilmInfoTMapper;
     @Autowired
     MtimeFilmActorTMapper mtimeFilmActorTMapper;
+    @Autowired
+    MtimeBannerTMapper mtimeBannerTMapper;
     @Override
     public FilmConditionVo selectFilmCondition(String catId, String sourceId, String yearId) {
         FilmConditionVo filmConditionVo = new FilmConditionVo();
@@ -67,16 +70,16 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public ResponseSearchFIlmVo searchFilmVoByMultibleCondition(FilmRequestVo filmRequestVo) throws Exception {
         ResponseSearchFIlmVo responseSearchFIlmVo = new ResponseSearchFIlmVo();
-        LinkedList<SearchFilmVo> searchFilmVos = null;
+        LinkedList<SearchFilmBO> searchFilmBOS = null;
         Integer limit = filmRequestVo.getPageSize();
         //1-按热门搜索 film_box_office   2-按时间搜索  film_time 3-按评价搜索   film_score
-        searchFilmVos=mtimeFilmTMapper.searchFilmsOrderByMultibleCondition(filmRequestVo.getShowType(),filmRequestVo.getSortId(),filmRequestVo.getCatId(),filmRequestVo.getSourceId(),filmRequestVo.getYearId());
+        searchFilmBOS =mtimeFilmTMapper.searchFilmsOrderByMultibleCondition(filmRequestVo.getShowType(),filmRequestVo.getSortId(),filmRequestVo.getCatId(),filmRequestVo.getSourceId(),filmRequestVo.getYearId());
 
-        int size = searchFilmVos.size();
+        int size = searchFilmBOS.size();
         int totalpage=(size+limit)/limit;
         responseSearchFIlmVo.setNowPage(1);
         responseSearchFIlmVo.setTotalPage(totalpage);
-        responseSearchFIlmVo.setSearchFilmVos(searchFilmVos);
+        responseSearchFIlmVo.setSearchFilmBOS(searchFilmBOS);
         return responseSearchFIlmVo;
     }
 
@@ -145,5 +148,34 @@ public class FilmServiceImpl implements FilmService {
         filmDetailVo.setImgs(filmImgVo);
         filmDetailVo.setFilmId(mfit.getFilmId());
         return filmDetailVo;
+    }
+
+    @Override
+    public FilmIndexVo getFilmIndex() {
+        FilmIndexVo filmIndexVo = new FilmIndexVo();
+
+        List<BannerVo> banners = mtimeBannerTMapper.getBanners();
+        filmIndexVo.setBanners(banners);
+
+        FilmVo hotFilmsVo = new FilmVo();
+        List<FilmInfo> hotFilms = mtimeBannerTMapper.getHotFilms();
+        hotFilmsVo.setFilmInfo(hotFilms);
+        hotFilmsVo.setFilmNum(hotFilms.size());
+        filmIndexVo.setHotFilms(hotFilmsVo);
+
+        FilmVo soonFilmsVo = new FilmVo();
+        List<FilmInfo> soonFilms = mtimeBannerTMapper.getSoonFilms();
+        soonFilmsVo.setFilmInfo(soonFilms);
+        soonFilmsVo.setFilmNum(soonFilms.size());
+        filmIndexVo.setSoonFilms(soonFilmsVo);
+
+        List<FilmInfo> boxRanking = mtimeFilmInfoTMapper.getBoxRanking();
+        filmIndexVo.setBoxRanking(boxRanking);
+        List<FilmInfo> expectRanking = mtimeFilmInfoTMapper.getExpectRanking();
+        filmIndexVo.setExpectRanking(expectRanking);
+        List<FilmInfo> top = mtimeFilmInfoTMapper.getTop();
+        filmIndexVo.setTop100(top);
+
+        return filmIndexVo;
     }
 }

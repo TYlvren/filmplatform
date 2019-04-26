@@ -1,17 +1,14 @@
 package com.stylefeng.guns.rest.controller;
 
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.ResponseSearchFIlmVo;
 import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVo;
-import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.service.UserService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -28,9 +25,9 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController {
 
-    @Reference
+    //@Reference
     OrderService orderService;
-    @Reference
+    //@Reference
     UserService userService;
 
     @RequestMapping(value = "/buyTickets" ,method = RequestMethod.POST)
@@ -90,6 +87,13 @@ public class OrderController {
         }
         //分页没做
         return hashMap;
+    }
+
+
+    @RequestMapping(value = "getPayInfo",method = RequestMethod.POST)
+    public Object getPayInfo(Integer orderId){
+
+
     }
 
 

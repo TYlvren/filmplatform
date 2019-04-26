@@ -29,7 +29,11 @@ public interface UserMapper {
      * @param password
      * @return
      */
+<<<<<<< HEAD
     UserBO selectUserByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+=======
+    UserBO selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
+>>>>>>> 867593a2dfe39adaa410a8da7bd0c23cf54626e6
 
 
     int insertUser(RequestUser requestUser);

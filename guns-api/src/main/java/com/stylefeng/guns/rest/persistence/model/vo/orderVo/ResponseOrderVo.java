@@ -10,11 +10,9 @@
  */
 package com.stylefeng.guns.rest.persistence.model.vo.orderVo;
 
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.SearchFilmVo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 
 /**
  * 〈一句话功能简述〉<br> 

@@ -84,7 +84,7 @@
     </select>
 
 
-    <select id="searchFilmsOrderByMultibleCondition" resultType="searchFilmVo">
+    <select id="searchFilmsOrderByMultibleCondition" resultType="searchFilmBo">
         select mfit.film_id filmId,mft.film_name filmName,mft.film_type filmType,mft.img_address imgAddress,mft.film_score filmScore from mtime_film_t mft,mtime_film_info_t mfit
         where mfit.UUID=mft.UUID
         and mft.film_type=#{showType}

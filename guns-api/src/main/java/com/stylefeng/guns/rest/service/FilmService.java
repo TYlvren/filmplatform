@@ -1,9 +1,6 @@
 package com.stylefeng.guns.rest.service;
 
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
-import com.stylefeng.guns.rest.persistence.model.vo.filmVo.ResponseSearchFIlmVo;
+import com.stylefeng.guns.rest.persistence.model.vo.filmVo.*;
 
 /**
  * Created by Flying Elephant
@@ -15,5 +12,5 @@ public interface FilmService {
     ResponseSearchFIlmVo searchFilmVoByMultibleCondition(FilmRequestVo filmRequestVo) throws Exception;
 
     FilmDetailVo getFilmDetail(String searchType, String value) throws Exception;
-    
+    FilmIndexVo getFilmIndex();
 }
