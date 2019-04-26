@@ -1,6 +1,8 @@
 package com.stylefeng.guns.rest.controller;
 
 
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
@@ -28,19 +30,16 @@ public class FilmController {
     FilmService filmService;
 
     @RequestMapping("getConditionList")
-    public Map getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
+    public Object getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
                                 @RequestParam(defaultValue = "99", required = false) String sourceId,
                                 @RequestParam(defaultValue = "99", required = false) String yearId) {
-        Map map = new HashMap();
+
         FilmConditionVo filmConditionVo = filmService.selectFilmCondition(catId, sourceId, yearId);
         if (filmConditionVo != null) {
-            map.put("status", 0);
-            map.put("data", filmConditionVo);
+            return new DataVO(0,filmConditionVo);
         } else {
-            map.put("status", 1);
-            map.put("msg", "查询失败，无条件可加载");
+            return new MsgVO(1,"查询失败，无条件可加载");
         }
-        return map;
     }
 
     @RequestMapping(value = "/getFilms")

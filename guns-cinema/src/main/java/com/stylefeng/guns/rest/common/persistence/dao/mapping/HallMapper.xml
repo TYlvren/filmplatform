@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.HallTypeMapper">
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.HallMapper">
 
     <sql id="table">mtime_hall_dict_t</sql>
 
@@ -20,5 +20,13 @@
                 UUID = #{hallType}
             </if>
         </where>
+    </select>
+
+    <select id="selectHallByFieldId" resultType="hallinfo">
+        select
+         mhdt.UUID as hallFieldId,show_name as hallName,price,seat_address as seatFile
+        from
+        mtime_hall_dict_t mhdt,mtime_field_t mft
+        where mhdt.UUID = hall_id and mft.UUID=#{fieldId}
     </select>
 </mapper>

@@ -33,5 +33,5 @@ public interface CinemaMapper  { //extends BaseMapper<Cinema> 继承BaseMapper�
                                                              @Param("areaId") int areaId,
                                                              @Param("hallType") int hallType);
 
-    CinemaInfo selectCinemaByUUID(Integer cinemaId);
+    CinemaInfo selectCinemaByUUID(int cinemaId);
 }

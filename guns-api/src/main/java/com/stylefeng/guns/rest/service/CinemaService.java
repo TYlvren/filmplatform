@@ -43,4 +43,28 @@ public interface CinemaService {
      * @return
      */
     CinemaInfo findCinema(Integer cinemaId);
+
+
+
+    /**
+     * 查找电影院电影及其场次
+     * @param cinemaId
+     * @return
+     */
+    List<CinemaFilmBO> findCinemaFilms(Integer cinemaId);
+
+    /**
+     * 查找对应场次的电影信息
+     * @param fieldId
+     * @return
+     */
+    FilmInfo findFilmInfo(Integer fieldId);
+
+
+    /**
+     * 获取场次信息
+     * @param fieldId
+     * @return
+     */
+    HallInfo findHallInfo(Integer fieldId);
 }

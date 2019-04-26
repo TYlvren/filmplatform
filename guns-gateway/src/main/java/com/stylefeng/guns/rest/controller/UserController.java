@@ -3,7 +3,7 @@ package com.stylefeng.guns.rest.controller;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusMsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.uservo.UserVO;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +27,18 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "register",method = RequestMethod.POST)
-    public StatusMsgVO register(RequestUser requestUser){
+    public MsgVO register(RequestUser requestUser){
 
         boolean check = userService.checkUser(requestUser.getUsername());
         if(!check){
-            return new StatusMsgVO(1,"用户已存在");
+            return new MsgVO(1,"用户已存在");
         }
 
         boolean register = userService.register(requestUser);
         if(register){
-            return new StatusMsgVO(0,"注册成功");
+            return new MsgVO(0,"注册成功");
         }else {
-            return new StatusMsgVO(999, "系统出现异常，请联系管理员");
+            return new MsgVO(999, "系统出现异常，请联系管理员");
         }
     }
 
@@ -49,12 +49,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "check",method = RequestMethod.POST)
-    public StatusMsgVO check(String username){
+    public MsgVO check(String username){
         boolean check = userService.checkUser(username);
         if(check){
-            return new StatusMsgVO(0,"验证成功");
+            return new MsgVO(0,"验证成功");
         }else {
-            return new StatusMsgVO(1,"用户已存在");
+            return new MsgVO(1,"用户已存在");
         }
     }
 
@@ -70,18 +70,18 @@ public class UserController {
      * @return
      */
     @RequestMapping("logout")
-    public StatusMsgVO logout(HttpServletRequest request){
+    public MsgVO logout(HttpServletRequest request){
         String username = (String) request.getAttribute("username");
         if(username == null || "".equals(username)){
-            return new StatusMsgVO(1,"退出失败，用户尚未登陆");
+            return new MsgVO(1,"退出失败，用户尚未登陆");
         }
         Long del = jedis.del(username);
         if(del == 1){
-            return new StatusMsgVO(0,"成功退出");
+            return new MsgVO(0,"成功退出");
         }else if(del == 0){
-            return new StatusMsgVO(1,"退出失败，用户尚未登陆");
+            return new MsgVO(1,"退出失败，用户尚未登陆");
         }else {
-            return new StatusMsgVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
     }
 
@@ -120,7 +120,7 @@ public class UserController {
         if(update){
             return new UserVO(0,userBO);
         }else {
-            return new StatusMsgVO(1,"用户信息修改失败");
+            return new MsgVO(1,"用户信息修改失败");
         }
 
     }

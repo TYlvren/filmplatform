@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.persistence.model.vo.cinemavo;
 
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.CinemaFilmBO;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.CinemaInfo;
 
 import java.io.Serializable;
@@ -9,12 +10,12 @@ public class FieldsVO implements Serializable {
     private static final long serialVersionUID = -5248700241260829904L;
 
     private CinemaInfo cinemaInfo;
-    private List filmList;
+    private List<CinemaFilmBO> filmList;
 
     public FieldsVO() {
     }
 
-    public FieldsVO(CinemaInfo cinemaInfo, List filmList) {
+    public FieldsVO(CinemaInfo cinemaInfo, List<CinemaFilmBO> filmList) {
         this.cinemaInfo = cinemaInfo;
         this.filmList = filmList;
     }
@@ -31,11 +32,11 @@ public class FieldsVO implements Serializable {
         this.cinemaInfo = cinemaInfo;
     }
 
-    public List getFilmList() {
+    public List<CinemaFilmBO> getFilmList() {
         return filmList;
     }
 
-    public void setFilmList(List filmList) {
+    public void setFilmList(List<CinemaFilmBO> filmList) {
         this.filmList = filmList;
     }
 }

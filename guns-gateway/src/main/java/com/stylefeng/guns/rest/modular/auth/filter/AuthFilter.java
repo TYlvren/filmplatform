@@ -5,7 +5,7 @@ import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusMsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,7 +70,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
                 String token = jedis.get(username);
                 if (!authToken.equals(token)) {
-                    RenderUtil.renderJson(response,new StatusMsgVO(1, "操作失败，用户尚未登录"));
+                    RenderUtil.renderJson(response,new MsgVO(1, "操作失败，用户尚未登录"));
                     return;
                 }
 

@@ -3,10 +3,11 @@ package com.stylefeng.guns.rest.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusDataVO;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusMsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.BrandsVO;
 import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.CinemasVO;
+import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.FieldInfoVO;
 import com.stylefeng.guns.rest.service.CinemaService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,19 +35,18 @@ public class CinemaController {
      */
     @RequestMapping("getCinemas")
     public Object getCinemas(Integer brandId,Integer areaId,Integer hallType,Integer halltypeId,int pageSize,int nowPage){
-        List<CinemaBO> cinemas = null;
+
         hallType = hallType == null ? halltypeId : hallType;
 
-
         if(brandId == null || areaId == null || hallType == null){
-            return new StatusMsgVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
-
+        List<CinemaBO> cinemas = null;
         try {
             cinemas = cinemaService.findCinemas(new Page(nowPage,pageSize),brandId,areaId,hallType);
         }catch (Exception e){
             e.printStackTrace();
-            return new StatusMsgVO(1,"影院信息查询失败");
+            return new MsgVO(1,"影院信息查询失败");
         }
 
 
@@ -70,7 +70,7 @@ public class CinemaController {
         List<HallTypeBO> halltypeList = null;
 
         if(brandId == null || areaId == null || hallType == null){
-            return new StatusMsgVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
 
         try {
@@ -79,11 +79,11 @@ public class CinemaController {
             halltypeList = cinemaService.findHallTypes(hallType);
         }catch (Exception e){
             e.printStackTrace();
-            return new StatusMsgVO(1,"影院信息查询失败");
+            return new MsgVO(1,"影院信息查询失败");
         }
 
         if(brandList == null || areaList == null || halltypeList == null){
-            return new StatusMsgVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
 
         //第一个为选中状态
@@ -104,12 +104,47 @@ public class CinemaController {
     public Object getFields(Integer cinemaId){
 
         if(cinemaId == null){
-            return new StatusMsgVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
 
-        CinemaInfo cinemaInfo = cinemaService.findCinema(cinemaId);
+        CinemaInfo cinemaInfo = null;
+        List<CinemaFilmBO> cinemaFilms = null;
+        try {
+            cinemaInfo = cinemaService.findCinema(cinemaId);
+            cinemaFilms = cinemaService.findCinemaFilms(cinemaId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new MsgVO(999,"系统出现异常，请联系管理员");
+        }
 
-        return new StatusDataVO(0,cinemaInfo);
+        Map<String,Object> map = new HashMap<>();
+        map.put("cinemaInfo",cinemaInfo);
+        map.put("filmList",cinemaFilms);
+        return new DataVO(0,map);
     }
 
+    @RequestMapping(value = "getFieldInfo",method = RequestMethod.POST)
+    public Object getFieldInfo(Integer cinemaId,Integer fieldId){
+
+        if(cinemaId == null || fieldId == null){
+            return new MsgVO(999,"系统出现异常，请联系管理员");
+        }
+        CinemaInfo cinemaInfo = null;
+        FilmInfo filmInfo = null;
+        HallInfo hallInfo = null;
+        try {
+            cinemaInfo = cinemaService.findCinema(cinemaId);
+            filmInfo = cinemaService.findFilmInfo(fieldId);
+            hallInfo = cinemaService.findHallInfo(fieldId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new MsgVO(999,"系统出现异常，请联系管理员");
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("cinemaInfo",cinemaInfo);
+        map.put("filmInfo",filmInfo);
+        map.put("hallInfo",hallInfo);
+        return new FieldInfoVO(0,"",map);
+    }
 }

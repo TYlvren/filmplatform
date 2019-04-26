@@ -2,10 +2,7 @@ package com.stylefeng.guns.rest.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.stylefeng.guns.rest.common.persistence.dao.AreaMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.BrandMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.CinemaMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.HallTypeMapper;
+import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +23,10 @@ public class CinemaServiceImpl implements CinemaService {
     AreaMapper areaMapper;
 
     @Autowired
-    HallTypeMapper hallTypeMapper;
+    HallMapper hallMapper;
+
+    @Autowired
+    FieldMapper fieldMapper;
 
     /**
      * 查询电影院
@@ -73,7 +73,7 @@ public class CinemaServiceImpl implements CinemaService {
      */
     @Override
     public List<HallTypeBO> findHallTypes(int hallType) {
-        return hallTypeMapper.selectHallTypeByUUID(hallType);
+        return hallMapper.selectHallByUUID(hallType);
     }
 
     /**
@@ -85,5 +85,39 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public CinemaInfo findCinema(Integer cinemaId) {
         return cinemaMapper.selectCinemaByUUID(cinemaId);
+    }
+
+    /**
+     * 查找电影院电影及其场次
+     *
+     * @param cinemaId
+     * @return
+     */
+    @Override
+    public List<CinemaFilmBO> findCinemaFilms(Integer cinemaId) {
+        return fieldMapper.selectHallFilmInfosAndFieldsByCinemaId(cinemaId);
+    }
+
+
+    /**
+     * 查找对应场次的电影信息
+     *
+     * @param fieldId
+     * @return
+     */
+    @Override
+    public FilmInfo findFilmInfo(Integer fieldId) {
+        return fieldMapper.selectFilmInfo(fieldId);
+    }
+
+    /**
+     * 获取场次信息
+     *
+     * @param fieldId
+     * @return
+     */
+    @Override
+    public HallInfo findHallInfo(Integer fieldId) {
+        return hallMapper.selectHallByFieldId(fieldId);
     }
 }
