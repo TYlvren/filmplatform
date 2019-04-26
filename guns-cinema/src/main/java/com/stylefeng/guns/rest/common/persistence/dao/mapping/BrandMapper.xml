@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.BrandMapper">
+
+    <sql id="table">mtime_brand_dict_t</sql>
+
+    <sql id="brandColumns">
+        UUID as brandId,show_name as brandName
+    </sql>
+
+    <!-- 查询 -->
+    <select id="selectBrandByUUID" resultType="brandbo">
+        select
+        <include refid="brandColumns"/>
+        from
+        <include refid="table"/>
+        <where>
+            <if test="brandId != 99">
+                UUID = #{brandId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

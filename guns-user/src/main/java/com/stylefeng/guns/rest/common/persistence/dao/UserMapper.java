@@ -35,4 +35,7 @@ public interface UserMapper {
     int insertUser(RequestUser requestUser);
 
     int updateUser(UserBO userBO);
+
+    UserBO selectUserByUUID(int uuid);
+
 }

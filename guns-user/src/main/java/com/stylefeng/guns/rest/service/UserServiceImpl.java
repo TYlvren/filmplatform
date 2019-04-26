@@ -73,4 +73,15 @@ public class UserServiceImpl implements UserService {
     public boolean updateUser(UserBO userBO) {
         return userMapper.updateUser(userBO) == 1;
     }
+
+    /**
+     * 通过UUID查找用户
+     *
+     * @param uuid
+     * @return
+     */
+    @Override
+    public UserBO findUser(int uuid) {
+        return userMapper.selectUserByUUID(uuid);
+    }
 }

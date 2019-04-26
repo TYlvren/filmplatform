@@ -5,6 +5,7 @@ import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,16 +40,16 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
+        String servletPath = request.getServletPath();
+
+        if (servletPath.equals("/" + jwtProperties.getAuthPath())) {
             chain.doFilter(request, response);
             return;
         }
 
-        String servletPath = request.getServletPath();
-
         String[] ignoreUrls = jwtProperties.getIgnoreUrl().split(",");
         for (String ignoreUrl : ignoreUrls) {
-            if (request.getServletPath().equals(ignoreUrl)) {
+            if (servletPath.equals(ignoreUrl)) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -68,8 +69,8 @@ public class AuthFilter extends OncePerRequestFilter {
                 }
 
                 String token = jedis.get(username);
-                if(!authToken.equals(token)){
-                    RenderUtil.renderJson(response,new ErrorTip(1, "操作失败，用户尚未登录"));
+                if (!authToken.equals(token)) {
+                    RenderUtil.renderJson(response,new MsgVO(1, "操作失败，用户尚未登录"));
                     return;
                 }
 
@@ -86,8 +87,8 @@ public class AuthFilter extends OncePerRequestFilter {
 
 
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        request.setAttribute("username",username);
-        request.setAttribute("token",authToken);
+        request.setAttribute("username", username);
+        request.setAttribute("token", authToken);
         chain.doFilter(request, response);
     }
 }

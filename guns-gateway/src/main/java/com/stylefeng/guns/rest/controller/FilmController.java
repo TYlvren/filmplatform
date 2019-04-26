@@ -1,12 +1,12 @@
 package com.stylefeng.guns.rest.controller;
 
 
-import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.ResponseSearchFIlmVo;
-
 import com.stylefeng.guns.rest.service.FilmService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,23 +26,20 @@ import java.util.Map;
 @RequestMapping("/film")
 public class FilmController {
 
-    @Reference
+    //@Reference
     FilmService filmService;
 
     @RequestMapping("getConditionList")
-    public Map getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
+    public Object getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
                                 @RequestParam(defaultValue = "99", required = false) String sourceId,
                                 @RequestParam(defaultValue = "99", required = false) String yearId) {
-        Map map = new HashMap();
+
         FilmConditionVo filmConditionVo = filmService.selectFilmCondition(catId, sourceId, yearId);
         if (filmConditionVo != null) {
-            map.put("status", 0);
-            map.put("data", filmConditionVo);
+            return new DataVO(0,filmConditionVo);
         } else {
-            map.put("status", 1);
-            map.put("msg", "查询失败，无条件可加载");
+            return new MsgVO(1,"查询失败，无条件可加载");
         }
-        return map;
     }
 
     @RequestMapping(value = "/getFilms")

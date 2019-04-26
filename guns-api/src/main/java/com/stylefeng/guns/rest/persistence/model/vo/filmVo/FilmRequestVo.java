@@ -1,6 +1,6 @@
 /**
  * Copyright (C), 2015-2019, XXX有限公司
- * FileName: FilmRequestVo
+ * FileName: RequestOrder
  * Author:   john
  * Date:     2019/4/23 11:29
  * Description:

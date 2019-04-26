@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.AreaMapper">
+
+    <sql id="table">mtime_area_dict_t</sql>
+
+    <sql id="areaColumns">
+        UUID as areaId,show_name as areaName
+    </sql>
+
+    <!-- 查询 -->
+    <select id="selectAreaByUUID" resultType="areabo">
+        select
+        <include refid="areaColumns"/>
+        from
+        <include refid="table"/>
+        <where>
+            <if test="areaId != 99">
+                UUID = #{areaId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

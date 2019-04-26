@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.FieldMapper">
+
+
+    <!-- 查询 -->
+    <resultMap id="cinemaFieldMap" type="cinemafilmbo">
+        <result property="filmId" column="film_id"/>
+        <result property="filmName" column="film_name"/>
+        <result property="filmLength" column="film_length"/>
+        <result property="filmCats" column="film_cats"/>
+        <result property="filmType" column="film_language"/>
+        <result property="actors" column="actors"/>
+        <result property="imgAddress" column="img_address"/>
+        <collection property="filmFields" ofType="cinemafieldbo">
+            <result property="fieldId" column="UUID"/>
+            <result property="beginTime" column="begin_time"/>
+            <result property="endTime" column="end_time"/>
+            <result property="language" column="film_language"/>
+            <result property="hallName" column="hall_name"/>
+            <result property="price" column="price"/>
+        </collection>
+    </resultMap>
+    <select id="selectHallFilmInfosAndFieldsByCinemaId" resultMap="cinemaFieldMap">
+        select
+        mhfit.film_id,film_name,film_length,film_cats,film_language,actors,img_address,
+        mft.UUID,begin_time,end_time,hall_name,price
+        from
+        mtime_field_t mft,mtime_hall_film_info_t mhfit
+        where mft.film_id = mhfit.film_id and cinema_id = #{cinemaId}
+</select>
+
+    <select id="selectFilmInfo" resultType="filminfo">
+      select
+      mft.film_id as filmId,film_name as filmName,film_language as filmType,
+      img_address as imgAddress,film_cats as filmCats,film_length as filmLength
+      from
+      mtime_field_t mft ,mtime_hall_film_info_t mhfit
+      where
+      mft.UUID = #{fieldId} and mft.film_id = mhfit.film_id
+    </select>
+
+</mapper>

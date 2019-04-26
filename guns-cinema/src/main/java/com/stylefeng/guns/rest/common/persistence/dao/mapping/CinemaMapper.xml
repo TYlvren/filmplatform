@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.CinemaMapper">
+
+
+    <sql id="table">mtime_cinema_t</sql>
+
+    <sql id="cinemaColumns">
+        UUID,cinema_name,cinema_phone,brand_id,area_id,hall_ids,
+        img_address,cinema_address,minimum_price
+    </sql>
+
+    <!-- 查询 -->
+    <resultMap id="cinemaMap" type="cinemabo">
+        <id property="uuid" column="UUID"/>
+        <result property="cinemaName" column="cinema_name"/>
+        <result property="address" column="cinema_address"/>
+        <result property="minimumPrice" column="minimum_price"/>
+    </resultMap>
+    <select id="selectCinemaByBrandIdAndAreaIdAndHallType" resultMap="cinemaMap">
+
+        select
+        UUID,cinema_name,cinema_address,minimum_price
+        from
+        <include refid="table"/>
+        <where>
+            <if test="brandId != 99">
+                brand_id like #{brandId}
+            </if>
+            <if test="areaId != 99">
+                and area_id like #{areaId}
+            </if>
+            <if test="hallType != 99">
+            <bind name="hallType" value="'%#' + hallType + '#%'" />
+                and hall_ids like #{hallType}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCinemaByUUID" resultType="cinemainfo">
+        select
+        UUID as cinemaId,cinema_name as cinemaName,cinema_phone as cinemaPhone,
+        img_address as imgUrl,cinema_address as cinemaAdress
+        from
+        <include refid="table"/>
+        where
+        UUID = #{cinemaId}
+    </select>
+
+</mapper>
