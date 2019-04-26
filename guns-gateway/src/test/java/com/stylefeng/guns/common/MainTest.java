@@ -23,9 +23,4 @@ public class MainTest {
         System.out.println(qrCode);
     }
 
-    @Test
-    public void isPay(){
-        boolean pay = TradeUtils.isPay("20881002003044005013");
-        System.out.println(pay);
-    }
 }

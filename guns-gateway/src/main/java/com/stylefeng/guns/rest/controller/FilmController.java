@@ -4,6 +4,7 @@ package com.stylefeng.guns.rest.controller;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.PageVO;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
@@ -48,7 +49,7 @@ public class FilmController {
     }
 
     @RequestMapping("getConditionList")
-    public Object getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
+    public StatusVO getConditionList(@RequestParam(defaultValue = "99", required = false) String catId,
                                 @RequestParam(defaultValue = "99", required = false) String sourceId,
                                 @RequestParam(defaultValue = "99", required = false) String yearId) {
 
@@ -61,46 +62,32 @@ public class FilmController {
     }
 
     @RequestMapping(value = "/getFilms")
-    public Map getSearchFilms( FilmRequestVo filmRequestVo){
-        HashMap<String, Object> hashMap = new HashMap<>();
+    public StatusVO getSearchFilms( FilmRequestVo filmRequestVo){
         try {
-            //分页没做！！！！！！！！！！！！！！！！
+            //分页没做！！！！！！！！！！！！！！！！,使用Mybatis-plus做
             ResponseSearchFIlmVo responseSearchFIlmVo =filmService.searchFilmVoByMultibleCondition(filmRequestVo);
-            hashMap.put("status",0);
-            hashMap.put("nowPage ",filmRequestVo.getNowPage());
-            hashMap.put("totalPage  ", responseSearchFIlmVo.getTotalPage());//总页数需要计算
-            hashMap.put("data", responseSearchFIlmVo.getSearchFilmBOS());
+
+           return new PageVO(0,responseSearchFIlmVo.getSearchFilmBOS(),filmRequestVo.getNowPage(),responseSearchFIlmVo.getTotalPage());
         } catch (SQLException e) {
             e.printStackTrace();
-            hashMap.put("status",1);
-            hashMap.put("msg","查询失败,无banner可加载");
+            return new MsgVO(1,"查询失败,无banner可加载");
         }catch (Exception e) {
             e.printStackTrace();
-            hashMap.put("status",999);
-            hashMap.put("msg","系统出现异常,请联系管理员");
+            return new MsgVO(999,"系统出现异常,请联系管理员");
         }
-        //分页没做
-        return hashMap;
     }
     @RequestMapping("/films/{value}")
-    public Map getFilmDetail(@PathVariable("value") String value, String  searchType ){
+    public StatusVO getFilmDetail(@PathVariable("value") String value, String  searchType ){
         HashMap<String, Object> hashMap = new HashMap<>();
         try {
             FilmDetailVo filmDetailVo=filmService.getFilmDetail(searchType,value);
-            hashMap.put("status",0);
-            hashMap.put("imgPre ","http://img.meetingshop.cn/");
-            hashMap.put("data",filmDetailVo);
+            return new ImgPreDataVO(0,"http://img.meetingshop.cn/",filmDetailVo);
         } catch (SQLException e) {
             e.printStackTrace();
-            hashMap.put("status",1);
-            hashMap.put("msg","查询失败，无影片可加载");
+            return new MsgVO(1,"查询失败，无影片可加载");
         }catch (Exception e) {
             e.printStackTrace();
-            hashMap.put("status",999);
-            hashMap.put("msg","系统出现异常,请联系管理员");
+            return new MsgVO(999,"系统出现异常,请联系管理员");
         }
-        return hashMap;
-
     }
-
 }

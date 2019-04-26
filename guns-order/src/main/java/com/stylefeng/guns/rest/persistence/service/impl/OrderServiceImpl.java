@@ -158,9 +158,8 @@ public class OrderServiceImpl implements OrderService {
                 stringBuffer.append(saledSeats.get(i)+",");
             }
         }
-        String s = stringBuffer.toString();
 
-        return s;
+        return stringBuffer.toString();
     }
 
     @Override
