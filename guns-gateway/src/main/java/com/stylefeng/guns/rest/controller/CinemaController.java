@@ -9,6 +9,7 @@ import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
 import com.stylefeng.guns.rest.service.CinemaService;
+import com.stylefeng.guns.rest.service.OrderService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,8 @@ public class CinemaController {
     @Reference
     CinemaService cinemaService;
 
+    @Reference
+    OrderService orderService;
     /**
      * 根据条件获取影院
      * @param brandId
@@ -48,7 +51,6 @@ public class CinemaController {
             e.printStackTrace();
             return new MsgVO(1,"影院信息查询失败");
         }
-
 
         /*Map<String,List<CinemaBO>> map = new HashMap<>();
         map.put("cinemas",cinemas);*/
@@ -135,6 +137,7 @@ public class CinemaController {
             cinemaInfo = cinemaService.findCinema(cinemaId);
             filmInfo = cinemaService.findFilmInfo(fieldId);
             hallInfo = cinemaService.findHallInfo(fieldId);
+
         }catch (Exception e){
             e.printStackTrace();
             return new MsgVO(999,"系统出现异常，请联系管理员");
