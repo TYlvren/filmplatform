@@ -39,4 +39,7 @@
         where mot.order_user=#{userId} and mot.film_id=mhfit.film_id
               and mft.UUID=mot.field_id and mct.UUID=mot.cinema_id
     </select>
+    <update id="updateOrderStatus" >
+        update mtime_order_t set order_status =1 where UUID=#{orderId}
+    </update>
 </mapper>

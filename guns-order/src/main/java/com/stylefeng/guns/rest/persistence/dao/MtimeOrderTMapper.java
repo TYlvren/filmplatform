@@ -25,5 +25,5 @@ public interface MtimeOrderTMapper extends BaseMapper<MtimeOrderT> {
 
     double searchPriceByOrderId(@Param("orderId")String orderId);
 
-    void updateOrderStatus(String orderId);
+    void updateOrderStatus(@Param("orderId")String orderId);
 }
