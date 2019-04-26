@@ -31,7 +31,7 @@
         where mft.film_id = mhfit.film_id and cinema_id = #{cinemaId}
 </select>
 
-    <select id="selectFilmInfo" resultType="filminfo">
+    <select id="selectFilmInfo" resultType="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmInfo">
       select
       mft.film_id as filmId,film_name as filmName,film_language as filmType,
       img_address as imgAddress,film_cats as filmCats,film_length as filmLength

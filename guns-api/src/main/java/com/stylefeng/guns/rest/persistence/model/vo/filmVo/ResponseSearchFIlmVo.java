@@ -10,6 +10,7 @@
  */
 package com.stylefeng.guns.rest.persistence.model.vo.filmVo;
 
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.SearchFilmBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,7 +26,7 @@ import java.util.LinkedList;
  */
 @Data
 public class ResponseSearchFIlmVo implements Serializable {
-    private LinkedList<SearchFilmVo> searchFilmVos;
+    private LinkedList<SearchFilmBO> searchFilmBOS;
     private Integer nowPage;
     private Integer totalPage ;
 }

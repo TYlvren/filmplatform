@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.stylefeng.guns.rest.persistence.model.vo.orderVo;
+package com.stylefeng.guns.rest.persistence.model.bo.orderBo;
 
 import lombok.Data;
 

@@ -1,12 +1,16 @@
 package com.stylefeng.guns.trade.utils;
 
 import com.alipay.api.AlipayResponse;
+import com.alipay.api.domain.TradeFundBill;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.stylefeng.guns.trade.config.Configs;
 import com.stylefeng.guns.trade.model.ExtendParams;
 import com.stylefeng.guns.trade.model.GoodsDetail;
 import com.stylefeng.guns.trade.model.builder.AlipayTradePrecreateRequestBuilder;
+import com.stylefeng.guns.trade.model.builder.AlipayTradeQueryRequestBuilder;
 import com.stylefeng.guns.trade.model.result.AlipayF2FPrecreateResult;
+import com.stylefeng.guns.trade.model.result.AlipayF2FQueryResult;
 import com.stylefeng.guns.trade.service.AlipayMonitorService;
 import com.stylefeng.guns.trade.service.AlipayTradeService;
 import com.stylefeng.guns.trade.service.impl.AlipayMonitorServiceImpl;
@@ -16,7 +20,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TradeUtils {
@@ -24,7 +31,6 @@ public class TradeUtils {
     }
 
     private static Log log = LogFactory.getLog(TradeUtils.class);
-
 
     // 支付宝当面付2.0服务
     private static AlipayTradeService tradeService;
@@ -66,9 +72,6 @@ public class TradeUtils {
             log.info("body:" + response.getBody());
         }
     }
-
-
-
 
     // 测试当面付2.0生成支付二维码
     public static String getQRCode(String orderId,float price) {
@@ -137,9 +140,25 @@ public class TradeUtils {
                 AlipayTradePrecreateResponse response = result.getResponse();
                 dumpResponse(response);
 
-                //需要修改为运行机器上的路径
+                //获取当前日期字符串
+                long timeMillis = System.currentTimeMillis();
+                Date date = new Date(timeMillis);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String dir = simpleDateFormat.format(date);
 
-                filePath = String.format("/qrCode/qr-%s.png",
+
+                //需要修改为运行机器上的路径
+                String parentPath = new File("").getAbsoluteFile().getParent()+
+                        File.separator + "nginx" + File.separator + "nginx-1.15.12" +
+                        File.separator +"qrCode";
+
+                File file = new File(parentPath + File.separator + dir);
+                if(!file.exists()){
+                    file.mkdir();
+                }
+
+                String path = file.getPath() + File.separator + "qr-%s.png";
+                filePath = String.format(path,
                         response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
@@ -159,5 +178,43 @@ public class TradeUtils {
         }
 
         return filePath;
+    }
+
+
+    // 测试当面付2.0查询订单
+    public static boolean isPay(String orderId) {
+        // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
+
+        // 创建查询请求builder，设置请求参数
+        AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
+                .setOutTradeNo(orderId);
+
+        AlipayF2FQueryResult result = tradeService.queryTradeResult(builder);
+        switch (result.getTradeStatus()) {
+            case SUCCESS:
+                log.info("查询返回该订单支付成功: )");
+
+                AlipayTradeQueryResponse response = result.getResponse();
+                dumpResponse(response);
+                log.info(response.getTradeStatus());
+                if (Utils.isListNotEmpty(response.getFundBillList())) {
+                    for (TradeFundBill bill : response.getFundBillList()) {
+                        log.info(bill.getFundChannel() + ":" + bill.getAmount());
+                    }
+                }
+                return true;
+
+            case FAILED:
+                log.error("查询返回该订单支付失败或被关闭!!!");
+                return false;
+            case UNKNOWN:
+                log.error("系统异常，订单支付状态未知!!!");
+                return false;
+
+            default:
+                log.error("不支持的交易状态，交易返回异常!!!");
+                return false;
+        }
+
     }
 }

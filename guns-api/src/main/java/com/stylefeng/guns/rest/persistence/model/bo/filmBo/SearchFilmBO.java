@@ -1,6 +1,6 @@
 /**
  * Copyright (C), 2015-2019, XXX有限公司
- * FileName: SearchFilmVo
+ * FileName: SearchFilmBO
  * Author:   john
  * Date:     2019/4/21 23:36
  * Description:
@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.stylefeng.guns.rest.persistence.model.vo.filmVo;
+package com.stylefeng.guns.rest.persistence.model.bo.filmBo;
 
 import java.io.Serializable;
 
@@ -20,17 +20,17 @@ import java.io.Serializable;
  * @create 2019/4/21
  * @since 1.0.0
  */
-public class SearchFilmVo implements Serializable {
+public class SearchFilmBO implements Serializable {
     private String filmId;
     private int filmType;
     private String imgAddress;
     private String filmName;
     private String filmScore;
 
-    public SearchFilmVo() {
+    public SearchFilmBO() {
     }
 
-    public SearchFilmVo(String filmId, int filmType, String imgAddress, String filmName, String filmScore) {
+    public SearchFilmBO(String filmId, int filmType, String imgAddress, String filmName, String filmScore) {
         this.filmId = filmId;
         this.filmType = filmType;
         this.imgAddress = imgAddress;
@@ -40,7 +40,7 @@ public class SearchFilmVo implements Serializable {
 
     @Override
     public String toString() {
-        return "SearchFilmVo{" +
+        return "SearchFilmBO{" +
                 "filmId='" + filmId + '\'' +
                 ", filmType=" + filmType +
                 ", imgAddress='" + imgAddress + '\'' +

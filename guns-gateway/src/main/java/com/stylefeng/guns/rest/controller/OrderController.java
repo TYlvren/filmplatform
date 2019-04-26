@@ -69,7 +69,7 @@ public class OrderController {
         return hashMap;
     }
 
-    @RequestMapping(value = "/getOrderInfo")
+    @RequestMapping(value = "/getOrderInfo",method = RequestMethod.POST)
     public Map getSearchFilms( @RequestParam(defaultValue = "1", required = false) int nowPage,
                                @RequestParam(defaultValue = "5", required = false) int pageSize,
                                HttpServletRequest request){

@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.persistence.model;
+package com.stylefeng.guns.rest.persistence.model.bo.filmBo;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 演员表
+ * 区域信息表
  * </p>
  *
  * @author ZhangYao
  * @since 2019-04-21
  */
-@TableName("mtime_actor_t")
-public class MtimeActorT extends Model<MtimeActorT> {
+@TableName("mtime_source_dict_t")
+public class MtimeSourceDictT extends Model<MtimeSourceDictT> {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,15 +26,10 @@ public class MtimeActorT extends Model<MtimeActorT> {
     @TableId(value = "UUID", type = IdType.AUTO)
     private Integer uuid;
     /**
-     * 演员名称
+     * 显示名称
      */
-    @TableField("actor_name")
-    private String actorName;
-    /**
-     * 演员图片位置
-     */
-    @TableField("actor_img")
-    private String actorImg;
+    @TableField("show_name")
+    private String showName;
 
 
     public Integer getUuid() {
@@ -45,20 +40,12 @@ public class MtimeActorT extends Model<MtimeActorT> {
         this.uuid = uuid;
     }
 
-    public String getActorName() {
-        return actorName;
+    public String getShowName() {
+        return showName;
     }
 
-    public void setActorName(String actorName) {
-        this.actorName = actorName;
-    }
-
-    public String getActorImg() {
-        return actorImg;
-    }
-
-    public void setActorImg(String actorImg) {
-        this.actorImg = actorImg;
+    public void setShowName(String showName) {
+        this.showName = showName;
     }
 
     @Override
@@ -68,10 +55,9 @@ public class MtimeActorT extends Model<MtimeActorT> {
 
     @Override
     public String toString() {
-        return "MtimeActorT{" +
+        return "MtimeSourceDictT{" +
         "uuid=" + uuid +
-        ", actorName=" + actorName +
-        ", actorImg=" + actorImg +
+        ", showName=" + showName +
         "}";
     }
 }

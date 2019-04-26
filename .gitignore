@@ -31,3 +31,7 @@ hs_err_pid*
 .classpath
 .project
 .settings/
+
+
+# qrCode #
+qrCode/*.png

@@ -12,7 +12,5 @@ public interface FilmService {
     ResponseSearchFIlmVo searchFilmVoByMultibleCondition(FilmRequestVo filmRequestVo) throws Exception;
 
     FilmDetailVo getFilmDetail(String searchType, String value) throws Exception;
-
-
     FilmIndexVo getFilmIndex();
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeFilmActorTMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeFilmActorT">
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.MtimeFilmActorT">
         <id column="UUID" property="uuid" />
         <result column="film_id" property="filmId" />
         <result column="actor_id" property="actorId" />

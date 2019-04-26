@@ -2,10 +2,18 @@ package com.stylefeng.guns.rest.controller;
 
 
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmConditionVo;
+import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmDetailVo;
+import com.stylefeng.guns.rest.persistence.model.vo.filmVo.FilmRequestVo;
+import com.stylefeng.guns.rest.persistence.model.vo.filmVo.ResponseSearchFIlmVo;
+
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.filmVo.*;
+
 import com.stylefeng.guns.rest.service.FilmService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/film")
 public class FilmController {
 
-    //@Reference
+    @Reference
     FilmService filmService;
 
     @RequestMapping("getIndex")
@@ -61,7 +69,7 @@ public class FilmController {
             hashMap.put("status",0);
             hashMap.put("nowPage ",filmRequestVo.getNowPage());
             hashMap.put("totalPage  ", responseSearchFIlmVo.getTotalPage());//总页数需要计算
-            hashMap.put("data", responseSearchFIlmVo.getSearchFilmVos());
+            hashMap.put("data", responseSearchFIlmVo.getSearchFilmBOS());
         } catch (SQLException e) {
             e.printStackTrace();
             hashMap.put("status",1);

@@ -2,8 +2,10 @@ package com.stylefeng.guns.rest.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
 import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.CinemasVO;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmInfo;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
@@ -137,7 +139,7 @@ public class CinemaController {
             cinemaInfo = cinemaService.findCinema(cinemaId);
             filmInfo = cinemaService.findFilmInfo(fieldId);
             hallInfo = cinemaService.findHallInfo(fieldId);
-
+            hallInfo.setSoldSeats(orderService.getSoldSeatsByFieldId(fieldId));
         }catch (Exception e){
             e.printStackTrace();
             return new MsgVO(999,"系统出现异常，请联系管理员");

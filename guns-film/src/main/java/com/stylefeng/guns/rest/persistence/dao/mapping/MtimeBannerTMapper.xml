@@ -3,18 +3,13 @@
 <mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeBannerTMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeBannerT">
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.MtimeBannerT">
         <id column="UUID" property="uuid" />
         <result column="banner_address" property="bannerAddress" />
         <result column="banner_url" property="bannerUrl" />
         <result column="is_valid" property="isValid" />
     </resultMap>
 
-    <resultMap id="BannerResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBanner">
-        <id column="UUID" property="bannerId" />
-        <result column="banner_address" property="bannerAddress" />
-        <result column="banner_url" property="bannerUrl" />
-    </resultMap>
 
     <select id="listValidBannerByIds" resultMap="BannerResultMap">
         select UUID, banner_address, banner_url from mtime_banner_t where UUID in

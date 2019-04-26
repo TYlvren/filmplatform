@@ -3,7 +3,7 @@
 <mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeYearDictTMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeYearDictT">
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.MtimeYearDictT">
         <id column="UUID" property="uuid" />
         <result column="show_name" property="showName" />
     </resultMap>
