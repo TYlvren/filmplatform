@@ -19,4 +19,12 @@ public class QRCodeVO  {
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
+
+    public String getQRCodeAddress() {
+        return QRCodeAddress;
+    }
+
+    public void setQRCodeAddress(String QRCodeAddress) {
+        this.QRCodeAddress = QRCodeAddress;
+    }
 }

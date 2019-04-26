@@ -4,7 +4,7 @@ import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.TradeFundBill;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.PayVO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.PayVO;
 import com.stylefeng.guns.trade.config.Configs;
 import com.stylefeng.guns.trade.model.ExtendParams;
 import com.stylefeng.guns.trade.model.GoodsDetail;

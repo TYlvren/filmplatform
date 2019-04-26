@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.persistence.model.bo.orderBo;
+package com.stylefeng.guns.rest.persistence.model.vo.orderVo;
 
 import java.io.Serializable;
 

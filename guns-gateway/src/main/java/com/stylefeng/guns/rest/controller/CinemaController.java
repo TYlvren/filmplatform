@@ -2,14 +2,13 @@ package com.stylefeng.guns.rest.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
-
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
-import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.CinemasVO;
-import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmInfo;
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.ConditionVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
-import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.PageVO;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.OrderService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +55,7 @@ public class CinemaController {
 
         /*Map<String,List<CinemaBO>> map = new HashMap<>();
         map.put("cinemas",cinemas);*/
-        return new CinemasVO(0,nowPage,pageSize,cinemas);
+        return new PageVO(0,cinemas,nowPage,pageSize);
     }
 
     /**
@@ -95,12 +94,7 @@ public class CinemaController {
         areaList.get(0).setActive(true);
         halltypeList.get(0).setActive(true);
 
-        Map<String,List> map = new HashMap<>();
-        map.put("brandList",brandList);
-        map.put("areaList",areaList);
-        map.put("halltypeList",halltypeList);
-
-        return new DataVO(0,map);
+        return new DataVO(0,new ConditionVO(brandList,areaList,halltypeList));
     }
 
     @RequestMapping(value = "getFields",method = {RequestMethod.GET,RequestMethod.POST})

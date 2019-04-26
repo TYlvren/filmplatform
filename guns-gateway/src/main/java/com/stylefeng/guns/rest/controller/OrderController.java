@@ -1,7 +1,7 @@
 package com.stylefeng.guns.rest.controller;
 
 
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.PayVO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.PayVO;
 import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;

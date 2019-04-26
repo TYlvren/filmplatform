@@ -2,8 +2,9 @@ package com.stylefeng.guns.rest.controller;
 
 import com.stylefeng.guns.rest.controller.dto.AuthResponse;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
-import com.stylefeng.guns.rest.persistence.model.vo.uservo.UserVO;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class AuthController {
 
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public Object createAuthenticationToken(String userName,String password) {
+    public StatusVO createAuthenticationToken(String userName, String password) {
         try {
             boolean validate = userService.findUser(userName,password);
 
@@ -39,7 +40,7 @@ public class AuthController {
                     jedis.setex(userName,1800, token);
                 }
 
-                return new UserVO(0,new AuthResponse(token, randomKey));
+                return new DataVO(0,new AuthResponse(token, randomKey));
             } else {
                 return new MsgVO(1, "用户名或密码错误");
             }
