@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-public class ResponseOrderVo implements Serializable {
+public class ResponseOrderBo implements Serializable {
     private String orderId;
     private String filmName;
     private String fieldTime;

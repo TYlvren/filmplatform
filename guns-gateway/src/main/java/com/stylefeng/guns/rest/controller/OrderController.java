@@ -2,7 +2,7 @@ package com.stylefeng.guns.rest.controller;
 
 
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVo;
+import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,10 +44,10 @@ public class OrderController {
             Boolean soldSeats1 = orderService.isSoldSeats(filedId, soldSeats);//false表示可以下单
             if(trueSeats1&&!soldSeats1){
                 UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-                ResponseOrderVo responseOrderVo=orderService.saveOrderInfo(filedId,soldSeats,seatsName,userbo);
+                ResponseOrderBo responseOrderBo =orderService.saveOrderInfo(filedId,soldSeats,seatsName,userbo);
                 hashMap.put("status",0);
                 hashMap.put("msg","");
-                hashMap.put("data", responseOrderVo);
+                hashMap.put("data", responseOrderBo);
             }else{
                 hashMap.put("status",1);
                 hashMap.put("msg","该订单不存在");
@@ -72,10 +72,10 @@ public class OrderController {
         try {
             //分页没做！！！！！！！！！！！！！！！！
             UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-            List<ResponseOrderVo>  responseOrderVoList= orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
+            List<ResponseOrderBo> responseOrderBoList = orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
             hashMap.put("status",0);
             hashMap.put("msg","");
-            hashMap.put("data",responseOrderVoList);
+            hashMap.put("data", responseOrderBoList);
         } catch (SQLException e) {
             e.printStackTrace();
             hashMap.put("status",1);
@@ -91,9 +91,9 @@ public class OrderController {
 
 
     @RequestMapping(value = "getPayInfo",method = RequestMethod.POST)
-    public Object getPayInfo(Integer orderId){
-
-
+    public Object getPayInfo(String orderId){
+                double price = orderService.searchSumPriceByOrderId(orderId);
+      return null;
     }
 
 

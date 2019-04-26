@@ -1,6 +1,6 @@
 package com.stylefeng.guns.trade.utils;
 
-import com.alipay.demo.trade.model.hb.*;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

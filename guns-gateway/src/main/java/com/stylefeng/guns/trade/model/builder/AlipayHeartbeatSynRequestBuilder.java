@@ -1,6 +1,6 @@
 package com.stylefeng.guns.trade.model.builder;
 
-import com.alipay.demo.trade.model.hb.*;
+
 import com.stylefeng.guns.trade.model.hb.*;
 import com.stylefeng.guns.trade.utils.Utils;
 import com.google.gson.annotations.SerializedName;

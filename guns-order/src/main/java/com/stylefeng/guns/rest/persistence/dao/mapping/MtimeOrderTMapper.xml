@@ -24,7 +24,11 @@
       select * from mtime_order_t where
       order_user=#{userId} order by order_time desc
     </select>
-    <select id="searchResponseOrdersByUserId" resultType="responseOrderVo">
+    <select id="searchPriceByOrderId" resultMap="double">
+      select order_price from mtime_order_t where
+      UUID=#{orderId}
+    </select>
+    <select id="searchResponseOrdersByUserId" resultType="responseOrderBo">
         select mot.UUID orderId, mhfit.film_name filmName,mft.begin_time fieldTime,
 			mct.cinema_name  cinemaName,
 			mot.seats_name  seatsName,
@@ -34,8 +38,5 @@
         from  mtime_order_t mot,mtime_hall_film_info_t mhfit,mtime_field_t mft,mtime_cinema_t mct
         where mot.order_user=#{userId} and mot.film_id=mhfit.film_id
               and mft.UUID=mot.field_id and mct.UUID=mot.cinema_id
-
-
-
     </select>
 </mapper>
