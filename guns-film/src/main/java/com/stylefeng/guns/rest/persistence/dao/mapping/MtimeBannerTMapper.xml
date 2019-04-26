@@ -23,4 +23,55 @@
         </foreach>
         and is_Valid = 0;
     </select>
+
+    <resultMap id="BannerResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBanner">
+        <id column="UUID" property="bannerId" />
+        <result column="banner_address" property="bannerAddress" />
+        <result column="banner_url" property="bannerUrl" />
+    </resultMap>
+
+    <select id="listValidBannerByIds" resultMap="BannerResultMap">
+        select UUID, banner_address, banner_url from mtime_banner_t where UUID in
+        <foreach collection="ids" close=")" open="(" separator="," item="id">
+            #{id}
+        </foreach>
+        and is_Valid = 0;
+    </select>
+
+    <select id="getBanners" resultType="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBanner">
+        SELECT
+            mtime_banner_t.UUID AS bannerId,
+            mtime_banner_t.banner_address AS bannerAddress,
+            mtime_banner_t.banner_url AS bannerUrl,
+            mtime_banner_t.is_valid
+        FROM
+            mtime_banner_t
+    </select>
+
+    <resultMap id="HotFilmsMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmInfo">
+        <result column="UUID" property="filmId"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="filmScore"/>
+        <result column="film_name" property="filmName"/>
+    </resultMap>
+    <select id="getHotFilms" resultMap="HotFilmsMap">
+        select UUID, film_type, img_address, film_score, film_name from mtime_film_t
+        where film_status = 1;
+    </select>
+
+    <resultMap id="SoonFilmsMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmInfo">
+        <result column="UUID" property="filmId"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_preSaleNum" property="expectNum"/>
+        <result column="film_time" property="showTime"/>
+    </resultMap>
+
+    <select id="getSoonFilms" resultMap="SoonFilmsMap">
+        select UUID, film_type, img_address, film_name, film_preSaleNum, film_time
+        from mtime_film_t
+        where film_status = 2;
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.stylefeng.guns.rest.persistence.service.impl;
 
 
 import com.alibaba.dubbo.config.annotation.Service;
+
 import com.stylefeng.guns.rest.persistence.dao.*;
 import com.stylefeng.guns.rest.persistence.model.MtimeFilmInfoT;
 import com.stylefeng.guns.rest.persistence.model.MtimeFilmT;
@@ -37,6 +38,8 @@ public class FilmServiceImpl implements FilmService {
     MtimeFilmInfoTMapper mtimeFilmInfoTMapper;
     @Autowired
     MtimeFilmActorTMapper mtimeFilmActorTMapper;
+    @Autowired
+    MtimeBannerTMapper mtimeBannerTMapper;
     @Override
     public FilmConditionVo selectFilmCondition(String catId, String sourceId, String yearId) {
         FilmConditionVo filmConditionVo = new FilmConditionVo();
@@ -145,5 +148,34 @@ public class FilmServiceImpl implements FilmService {
         filmDetailVo.setImgs(filmImgVo);
         filmDetailVo.setFilmId(mfit.getFilmId());
         return filmDetailVo;
+    }
+
+    @Override
+    public FilmIndexVo getFilmIndex() {
+        FilmIndexVo filmIndexVo = new FilmIndexVo();
+
+        List<BannerVo> banners = mtimeBannerTMapper.getBanners();
+        filmIndexVo.setBanners(banners);
+
+        FilmVo hotFilmsVo = new FilmVo();
+        List<FilmInfo> hotFilms = mtimeBannerTMapper.getHotFilms();
+        hotFilmsVo.setFilmInfo(hotFilms);
+        hotFilmsVo.setFilmNum(hotFilms.size());
+        filmIndexVo.setHotFilms(hotFilmsVo);
+
+        FilmVo soonFilmsVo = new FilmVo();
+        List<FilmInfo> soonFilms = mtimeBannerTMapper.getSoonFilms();
+        soonFilmsVo.setFilmInfo(soonFilms);
+        soonFilmsVo.setFilmNum(soonFilms.size());
+        filmIndexVo.setSoonFilms(soonFilmsVo);
+
+        List<FilmInfo> boxRanking = mtimeFilmInfoTMapper.getBoxRanking();
+        filmIndexVo.setBoxRanking(boxRanking);
+        List<FilmInfo> expectRanking = mtimeFilmInfoTMapper.getExpectRanking();
+        filmIndexVo.setExpectRanking(expectRanking);
+        List<FilmInfo> top = mtimeFilmInfoTMapper.getTop();
+        filmIndexVo.setTop100(top);
+
+        return filmIndexVo;
     }
 }
