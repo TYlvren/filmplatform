@@ -2,9 +2,14 @@ package com.stylefeng.guns.rest.controller;
 
 
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.QRCodeVO;
 import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVo;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.service.UserService;
+import com.stylefeng.guns.trade.utils.TradeUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,9 +96,20 @@ public class OrderController {
 
 
     @RequestMapping(value = "getPayInfo",method = RequestMethod.POST)
-    public Object getPayInfo(Integer orderId){
+    public StatusVO getPayInfo(String orderId){
 
+        if(orderId == null || orderId.equals("")){
+            return new MsgVO(1,"订单支付失败，请稍后重试");
+        }
 
+        String qrCodeAddress;
+        try {
+            qrCodeAddress = TradeUtils.getQRCode(orderId,5);
+        }catch (Exception e){
+            return new MsgVO(999,"系统出现异常，请联系管理员");
+        }
+
+        return new ImgPreDataVO(0,"",new QRCodeVO(orderId,qrCodeAddress));
     }
 
 

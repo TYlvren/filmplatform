@@ -1,5 +1,7 @@
 package com.stylefeng.guns.rest.persistence.model.vo.commonvo;
 
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+
 import java.io.Serializable;
 
 public class DataVO extends StatusVO implements Serializable {

@@ -23,5 +23,12 @@
             <version>2.3</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--阿里云OSS-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.4.0</version>
+        </dependency>
     </dependencies>
 </project>

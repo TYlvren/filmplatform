@@ -1,11 +1,12 @@
 package com.stylefeng.guns.rest.persistence.model.vo.cinemavo;
 
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+
 import java.io.Serializable;
 
-public class CinemasVO implements Serializable {
+public class CinemasVO extends StatusVO implements Serializable {
 
     private static final long serialVersionUID = -1153570805905559717L;
-    private int status ;
     private int nowPage;
     private int totalPage;
 
@@ -16,18 +17,10 @@ public class CinemasVO implements Serializable {
     }
 
     public CinemasVO(int status, int nowPage, int totalPage, Object data) {
-        this.status = status;
+        super(status);
         this.nowPage = nowPage;
         this.totalPage = totalPage;
         this.data = data;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getNowPage() {

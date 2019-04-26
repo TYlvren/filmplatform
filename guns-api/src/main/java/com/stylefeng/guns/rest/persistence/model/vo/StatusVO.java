@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.persistence.model.vo.commonvo;
+package com.stylefeng.guns.rest.persistence.model.vo;
 
 import java.io.Serializable;
 

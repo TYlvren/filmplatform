@@ -3,11 +3,11 @@ package com.stylefeng.guns.rest.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
-import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
-import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
-import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.BrandsVO;
 import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.CinemasVO;
-import com.stylefeng.guns.rest.persistence.model.vo.cinemavo.FieldInfoVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
 import com.stylefeng.guns.rest.service.CinemaService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +34,7 @@ public class CinemaController {
      * @return
      */
     @RequestMapping("getCinemas")
-    public Object getCinemas(Integer brandId,Integer areaId,Integer hallType,Integer halltypeId,int pageSize,int nowPage){
+    public StatusVO getCinemas(Integer brandId,Integer areaId,Integer hallType,Integer halltypeId,int pageSize,int nowPage){
 
         hallType = hallType == null ? halltypeId : hallType;
 
@@ -63,7 +63,7 @@ public class CinemaController {
      * @return
      */
     @RequestMapping("getCondition")
-    public Object getCondition(Integer brandId,Integer areaId,Integer hallType){
+    public StatusVO getCondition(Integer brandId, Integer areaId, Integer hallType){
 
         List<BrandBO> brandList = null;
         List<AreaBO> areaList = null;
@@ -96,12 +96,11 @@ public class CinemaController {
         map.put("areaList",areaList);
         map.put("halltypeList",halltypeList);
 
-
-        return new BrandsVO(0,map);
+        return new DataVO(0,map);
     }
 
     @RequestMapping(value = "getFields",method = {RequestMethod.GET,RequestMethod.POST})
-    public Object getFields(Integer cinemaId){
+    public StatusVO getFields(Integer cinemaId){
 
         if(cinemaId == null){
             return new MsgVO(999,"系统出现异常，请联系管理员");
@@ -124,7 +123,7 @@ public class CinemaController {
     }
 
     @RequestMapping(value = "getFieldInfo",method = RequestMethod.POST)
-    public Object getFieldInfo(Integer cinemaId,Integer fieldId){
+    public StatusVO getFieldInfo(Integer cinemaId,Integer fieldId){
 
         if(cinemaId == null || fieldId == null){
             return new MsgVO(999,"系统出现异常，请联系管理员");
@@ -145,6 +144,6 @@ public class CinemaController {
         map.put("cinemaInfo",cinemaInfo);
         map.put("filmInfo",filmInfo);
         map.put("hallInfo",hallInfo);
-        return new FieldInfoVO(0,"",map);
+        return new ImgPreDataVO(0,"",map);
     }
 }
