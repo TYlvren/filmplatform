@@ -2,9 +2,7 @@ package com.stylefeng.guns.rest.persistence.model.vo.commonvo;
 
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
 
-import java.io.Serializable;
-
-public class MsgVO extends StatusVO implements Serializable {
+public class MsgVO extends StatusVO {
 
     private static final long serialVersionUID = -3439842550822596019L;
 

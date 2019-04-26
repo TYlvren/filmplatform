@@ -3,8 +3,9 @@ package com.stylefeng.guns.rest.controller;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
+import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
-import com.stylefeng.guns.rest.persistence.model.vo.uservo.UserVO;
 import com.stylefeng.guns.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,13 +92,13 @@ public class UserController {
      * @return
      */
     @RequestMapping("getUserInfo")
-    public UserVO getUserInfo(HttpServletRequest request){
+    public StatusVO getUserInfo(HttpServletRequest request){
         String username = (String) request.getAttribute("username");
         UserBO userBO = userService.findUser(username);
         if(userBO == null){
-            return new UserVO(999,"系统出现异常，请联系管理员");
+            return new DataVO(999,"系统出现异常，请联系管理员");
         }
-        return new UserVO(0, userBO);
+        return new DataVO(0, userBO);
     }
 
     /**
@@ -106,7 +107,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "updateUserInfo",method = RequestMethod.POST)
-    public Object updateUserInfo(UserBO userBO){
+    public StatusVO updateUserInfo(UserBO userBO){
 
         boolean update = false;
         try {
@@ -114,14 +115,13 @@ public class UserController {
             userBO = userService.findUser(userBO.getUuid());
         }catch (Exception e){
             e.printStackTrace();
-            return new UserVO(999,"系统出现异常，请联系管理员");
+            return new MsgVO(999,"系统出现异常，请联系管理员");
         }
 
         if(update){
-            return new UserVO(0,userBO);
+            return new DataVO(0,userBO);
         }else {
             return new MsgVO(1,"用户信息修改失败");
         }
-
     }
 }

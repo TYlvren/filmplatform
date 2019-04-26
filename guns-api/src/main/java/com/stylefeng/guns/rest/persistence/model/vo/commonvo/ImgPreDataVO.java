@@ -1,8 +1,6 @@
 package com.stylefeng.guns.rest.persistence.model.vo.commonvo;
 
-import java.io.Serializable;
-
-public class ImgPreDataVO extends DataVO implements Serializable {
+public class ImgPreDataVO extends DataVO{
     private static final long serialVersionUID = 1829385360726731540L;
 
     private String imgPre;
