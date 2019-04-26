@@ -1,12 +1,14 @@
 package com.stylefeng.guns.rest.controller;
 
 
+import com.stylefeng.guns.rest.persistence.model.bo.orderBo.PayVO;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
+import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
 import com.stylefeng.guns.rest.persistence.model.vo.orderVo.QRCodeVO;
-import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVo;
+import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.service.UserService;
 import com.stylefeng.guns.trade.utils.TradeUtils;
@@ -49,10 +51,10 @@ public class OrderController {
             Boolean soldSeats1 = orderService.isSoldSeats(filedId, soldSeats);//false表示可以下单
             if(trueSeats1&&!soldSeats1){
                 UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-                ResponseOrderVo responseOrderVo=orderService.saveOrderInfo(filedId,soldSeats,seatsName,userbo);
+                ResponseOrderBo responseOrderBo =orderService.saveOrderInfo(filedId,soldSeats,seatsName,userbo);
                 hashMap.put("status",0);
                 hashMap.put("msg","");
-                hashMap.put("data", responseOrderVo);
+                hashMap.put("data", responseOrderBo);
             }else{
                 hashMap.put("status",1);
                 hashMap.put("msg","该订单不存在");
@@ -77,10 +79,10 @@ public class OrderController {
         try {
             //分页没做！！！！！！！！！！！！！！！！
             UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-            List<ResponseOrderVo>  responseOrderVoList= orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
+            List<ResponseOrderBo> responseOrderBoList = orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
             hashMap.put("status",0);
             hashMap.put("msg","");
-            hashMap.put("data",responseOrderVoList);
+            hashMap.put("data", responseOrderBoList);
         } catch (SQLException e) {
             e.printStackTrace();
             hashMap.put("status",1);
@@ -96,21 +98,37 @@ public class OrderController {
 
 
     @RequestMapping(value = "getPayInfo",method = RequestMethod.POST)
-    public StatusVO getPayInfo(String orderId){
+    public StatusVO getPayInfo(String orderId) {
 
-        if(orderId == null || orderId.equals("")){
-            return new MsgVO(1,"订单支付失败，请稍后重试");
+        if (orderId == null || orderId.equals("")) {
+            return new MsgVO(1, "订单支付失败，请稍后重试");
         }
 
         String qrCodeAddress;
         try {
-            qrCodeAddress = TradeUtils.getQRCode(orderId,5);
-        }catch (Exception e){
-            return new MsgVO(999,"系统出现异常，请联系管理员");
+            double price = orderService.searchSumPriceByOrderId(orderId);
+            qrCodeAddress = TradeUtils.getQRCode(orderId, price);
+        } catch (Exception e) {
+            return new MsgVO(999, "系统出现异常，请联系管理员");
         }
 
-        return new ImgPreDataVO(0,"",new QRCodeVO(orderId,qrCodeAddress));
+        return new ImgPreDataVO(0, "", new QRCodeVO(orderId, qrCodeAddress));
     }
 
+    @RequestMapping("getPayResult")
+    public StatusVO getPayResult(String orderId,int tryNums){
 
+        if(tryNums > 3){
+            return new MsgVO(1,"订单支付失败，请稍后重试");
+        }
+        PayVO isPay = TradeUtils.isPay(orderId);
+        if(isPay.getOrderStatus() == 1){
+            try {
+                orderService.updateOrderStatus(orderId);
+            }catch (Exception e){
+                return new MsgVO(999,"系统出现异常，请联系管理员");
+            }
+        }
+        return new DataVO(0,isPay);
+    }
 }

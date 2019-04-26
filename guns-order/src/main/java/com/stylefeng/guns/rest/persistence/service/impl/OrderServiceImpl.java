@@ -4,17 +4,15 @@ package com.stylefeng.guns.rest.persistence.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 
 import com.alibaba.fastjson.JSONObject;
 import com.stylefeng.guns.rest.persistence.dao.MtimeFieldTMapper;
 import com.stylefeng.guns.rest.persistence.dao.MtimeOrderTMapper;
 import com.stylefeng.guns.rest.persistence.model.MtimeFieldT;
 import com.stylefeng.guns.rest.persistence.model.MtimeOrderT;
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.SeatJsonBo;
 
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVo;
+import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.utils.FileUtils;
 
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,39 +74,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseOrderVo saveOrderInfo(int filedId, String soldSeats, String seatsName, UserBO userbo) throws Exception{
-        ResponseOrderVo responseOrderVo = new ResponseOrderVo();
+    public ResponseOrderBo saveOrderInfo(int filedId, String soldSeats, String seatsName, UserBO userbo) throws Exception{
+        ResponseOrderBo responseOrderBo = new ResponseOrderBo();
 
         //String cinamaName= cinamaservice.getNameByfiledId(filedId)
         MtimeFieldT mtimeField=  mtimeFieldTMapper.searchByFiledId(filedId);
         Integer cinemaId = mtimeField.getCinemaId();
 
         //获取电影院名称
-        responseOrderVo.setCinemaName("电影院名称查询接口");
+        responseOrderBo.setCinemaName("电影院名称查询接口");
 
 
         //可能需要拼接字符串
-        responseOrderVo.setFieldTime(mtimeField.getBeginTime());
+        responseOrderBo.setFieldTime(mtimeField.getBeginTime());
         Integer filmId = mtimeField.getFilmId();
         //查询电影名称
-        responseOrderVo.setFilmName("电影名称查询接口");
+        responseOrderBo.setFilmName("电影名称查询接口");
         //设置orderId为uuid
         UUID uuid = UUID.randomUUID();
-        responseOrderVo.setOrderId( uuid.toString().replace("-",""));
+        responseOrderBo.setOrderId( uuid.toString().replace("-",""));
 
         //票的价格从哪拿？？是否需要计算总数
          double perprice=  (double)mtimeField.getPrice();
         int sum = soldSeats.split(",").length;
         double sumprice=sum*perprice;
-        responseOrderVo.setOrderPrice(sumprice);
+        responseOrderBo.setOrderPrice(sumprice);
 
         //设置时间戳
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         Date date = new Date();
-        responseOrderVo.setOrderTimestamp( df.format(date));
+        responseOrderBo.setOrderTimestamp( df.format(date));
 
-        responseOrderVo.setOrderStatus("未支付");
-        responseOrderVo.setSeatsName(seatsName);
+        responseOrderBo.setOrderStatus("未支付");
+        responseOrderBo.setSeatsName(seatsName);
         MtimeOrderT mtimeOrderT = new MtimeOrderT();
         mtimeOrderT.setUuid(uuid.toString());
         mtimeOrderT.setCinemaId(mtimeField.getCinemaId());
@@ -123,31 +120,31 @@ public class OrderServiceImpl implements OrderService {
         mtimeOrderT.setOrderUser(userbo.getUuid());
         mtimeOrderT.setOrderStatus(0);
         Integer insert = mtimeOrderTMapper.insert(mtimeOrderT);
-        return responseOrderVo;
+        return responseOrderBo;
     }
 
     @Override
-    public List<ResponseOrderVo> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception{
+    public List<ResponseOrderBo> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception{
         //需要分页！！！！！！！
-        List<ResponseOrderVo> responseOrderVos=mtimeOrderTMapper.searchResponseOrdersByUserId(userId);
-        for (ResponseOrderVo responseOrderVo : responseOrderVos) {
-            String orderStatus = responseOrderVo.getOrderStatus();
+        List<ResponseOrderBo> responseOrderBos =mtimeOrderTMapper.searchResponseOrdersByUserId(userId);
+        for (ResponseOrderBo responseOrderBo : responseOrderBos) {
+            String orderStatus = responseOrderBo.getOrderStatus();
             switch (orderStatus){
                 case "0" :{
-                    responseOrderVo.setOrderStatus("待支付");
+                    responseOrderBo.setOrderStatus("待支付");
                     break;
                 }
                 case "1" :{
-                    responseOrderVo.setOrderStatus("已支付");
+                    responseOrderBo.setOrderStatus("已支付");
                     break;
                 }
                 case "2" :{
-                    responseOrderVo.setOrderStatus("已关闭");
+                    responseOrderBo.setOrderStatus("已关闭");
                     break;
                 }
             }
         }
-        return responseOrderVos;
+        return responseOrderBos;
     }
 
     @Override
@@ -164,5 +161,16 @@ public class OrderServiceImpl implements OrderService {
         String s = stringBuffer.toString();
 
         return s;
+    }
+
+    @Override
+    public double searchSumPriceByOrderId(String orderId) {
+        return mtimeOrderTMapper.searchPriceByOrderId(orderId);
+    }
+
+
+    @Override
+    public void updateOrderStatus(String orderId) {
+        mtimeOrderTMapper.updateOrderStatus(orderId);
     }
 }
