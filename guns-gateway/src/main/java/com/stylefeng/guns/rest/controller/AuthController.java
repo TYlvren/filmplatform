@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.controller.dto.AuthResponse;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
@@ -14,7 +15,7 @@ import redis.clients.jedis.Jedis;
 @RestController
 public class AuthController {
 
-    //@Reference
+    @Reference
     UserService userService;
 
     @Autowired

@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmMessageBO;
 
 import java.util.List;
 
@@ -67,4 +68,6 @@ public interface CinemaService {
      * @return
      */
     HallInfo findHallInfo(Integer fieldId);
+
+    FilmMessageBO findFilmMessageBO(int fieldId);
 }

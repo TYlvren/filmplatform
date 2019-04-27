@@ -10,7 +10,7 @@
     </sql>
 
     <!-- 查询 -->
-    <select id="selectHallTypeByUUID" resultType="halltypebo">
+    <select id="selectHallByUUID" resultType="halltypebo">
         select
         <include refid="halltypeColumns"/>
         from

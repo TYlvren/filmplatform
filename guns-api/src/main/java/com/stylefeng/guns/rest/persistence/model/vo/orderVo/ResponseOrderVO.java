@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.stylefeng.guns.rest.persistence.model.bo.orderBo;
+package com.stylefeng.guns.rest.persistence.model.vo.orderVo;
 
 import lombok.Data;
 
@@ -23,11 +23,11 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-public class ResponseOrderBo implements Serializable {
+public class ResponseOrderVO implements Serializable {
     private String orderId;
     private String filmName;
-    private String fieldTime;
     private String cinemaName;
+    private String fieldTime;
     private String seatsName;
     private Double orderPrice;
     private String orderTimestamp;

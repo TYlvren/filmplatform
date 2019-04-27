@@ -31,7 +31,7 @@
         where mft.film_id = mhfit.film_id and cinema_id = #{cinemaId}
 </select>
 
-    <select id="selectFilmInfo" resultType="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmInfo">
+    <select id="selectFilmInfo" resultType="filminfo">
       select
       mft.film_id as filmId,film_name as filmName,film_language as filmType,
       img_address as imgAddress,film_cats as filmCats,film_length as filmLength
@@ -39,6 +39,31 @@
       mtime_field_t mft ,mtime_hall_film_info_t mhfit
       where
       mft.UUID = #{fieldId} and mft.film_id = mhfit.film_id
+    </select>
+
+
+    <resultMap id="filmMessageBOMap" type="filmMessageBO">
+        <id column="UUID" property="fieldId"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="film_name" property="filmName"/>
+        <result column="begin_time" property="fieldTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="hall_id" property="hallId"/>
+        <result column="hall_name" property="hallName"/>
+        <result column="price" property="price"/>
+    </resultMap>
+
+    <select id="selectFilmMessage" resultType="filmMessageBO">
+        select
+        mft.UUID,cinema_id,cinema_name,film_id,film_name,begin_time,end_time,hall_id,hall_name,,seat_address,price
+        from
+        filmplatform_cinema.mtime_field_t mft,
+        filmplatform_cinema.mtime_cinema_t mct,
+        filmplatform_cinema.mtime_hall_film_info_t mhfit
+        where
+        mft.UUID=#{filedId} and
+        mct.UUID = cinema_id and
+        mhfit.UUID = film_id
     </select>
 
 </mapper>

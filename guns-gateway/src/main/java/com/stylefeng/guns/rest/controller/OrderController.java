@@ -1,15 +1,18 @@
 package com.stylefeng.guns.rest.controller;
 
 
-import com.stylefeng.guns.rest.persistence.model.vo.orderVo.PayVO;
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmMessageBO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVO;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.vo.StatusVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.DataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.ImgPreDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgAndDataVO;
 import com.stylefeng.guns.rest.persistence.model.vo.commonvo.MsgVO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.PayVO;
 import com.stylefeng.guns.rest.persistence.model.vo.orderVo.QRCodeVO;
+import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.service.UserService;
 import com.stylefeng.guns.trade.utils.TradeUtils;
@@ -32,33 +35,45 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
 
-    //@Reference
+    @Reference
     OrderService orderService;
-    //@Reference
+    @Reference
     UserService userService;
+
+    @Reference
+    CinemaService cinemaService;
 
     @RequestMapping(value = "/buyTickets" ,method = RequestMethod.POST)
     //filedId如果不传会出现格式化问题
-    public StatusVO buyTicketsController(int filedId,
+    public StatusVO buyTicketsController(int fieldId,
                                     String soldSeats,
                                     String seatsName, HttpServletRequest request) {
+
+        if(soldSeats==null || seatsName==null){
+            return new MsgVO(1,"该订单不存在");
+        }
+
 
         //System.out.println(request.getAttribute("username"));
         try {
 
-            if(soldSeats==null || seatsName==null)throw new SQLException("参数异常");
-            Boolean trueSeats1= orderService.isTrueSeats(filedId, soldSeats);//true表示可以下单
-            Boolean soldSeats1 = orderService.isSoldSeats(filedId, soldSeats);//false表示可以下单
+            FilmMessageBO filmMessageBO = cinemaService.findFilmMessageBO(fieldId);
+
+            //true表示可以下单
+            Boolean trueSeats1= orderService.isTrueSeats(filmMessageBO.getSeatAddress(), soldSeats);
+
+            //false表示可以下单
+            Boolean soldSeats1 = orderService.isSoldSeats(fieldId, soldSeats);
+
             if(trueSeats1&&!soldSeats1){
                 UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-                ResponseOrderBo responseOrderBo =orderService.saveOrderInfo(filedId,soldSeats,seatsName,userbo);
-                return new MsgAndDataVO(0,"",responseOrderBo);
+
+                ResponseOrderVO responseOrderVO =orderService.saveOrderInfo(filmMessageBO,seatsName);
+                boolean insert = orderService.addOrder(filmMessageBO, responseOrderVO,soldSeats,userbo);
+                return new MsgAndDataVO(0,"", responseOrderVO);
             }else{
                 return new MsgVO(1,"该订单不存在");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new MsgVO(1,"该订单不存在");
         }catch (Exception e) {
             e.printStackTrace();
             return new MsgVO(999,"系统出现异常,请联系管理员");
@@ -73,9 +88,9 @@ public class OrderController {
         try {
             //分页没做！！！！！！！！！！！！！！！！
             UserBO userbo = userService.findUser(request.getAttribute("username").toString());
-            List<ResponseOrderBo> responseOrderBoList = orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
+            List<ResponseOrderVO> responseOrderVOList = orderService.getOrserVoByUserId(userbo.getUuid(),nowPage,pageSize);
 
-            return new MsgAndDataVO(0,"",responseOrderBoList);
+            return new MsgAndDataVO(0,"", responseOrderVOList);
         } catch (SQLException e) {
             e.printStackTrace();
 

@@ -1,24 +1,21 @@
 package com.stylefeng.guns.rest.persistence.service.impl;
 
 
-
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
-
 import com.alibaba.fastjson.JSONObject;
 import com.stylefeng.guns.rest.persistence.dao.MtimeFieldTMapper;
 import com.stylefeng.guns.rest.persistence.dao.MtimeOrderTMapper;
-import com.stylefeng.guns.rest.persistence.model.MtimeFieldT;
 import com.stylefeng.guns.rest.persistence.model.MtimeOrderT;
-
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmMessageBO;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVO;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.utils.FileUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,125 +34,137 @@ public class OrderServiceImpl implements OrderService {
     MtimeFieldTMapper mtimeFieldTMapper;
 
     @Override
-    public Boolean isTrueSeats(int filedId, String seatId) throws Exception{
-        //影院获取文件路径接口没实现!!!!!!!!!
-        String JsonContext = new FileUtils().ReadFile("D:\\王道\\课件\\Project4\\接口文档\\订单模块接口文档\\cgs.json");
+    public Boolean isTrueSeats(String seatAddress, String seatId) throws Exception {
+        String JsonContext = new FileUtils().ReadFile(seatAddress);
+
         //将读取的数据转换为JSONObject
         JSONObject jsonObject1 = JSON.parseObject(JsonContext);
-        String ids =(String) jsonObject1.get("ids");
-        int limit =(int) jsonObject1.get("limit");
+
+        String ids = (String) jsonObject1.get("ids");
+        int limit = (int) jsonObject1.get("limit");
         String[] split = ids.split(",");
         String[] seatIds = seatId.split(",");
-        if(seatIds.length>limit)return false;
+        if (seatIds.length > limit) return false;
         for (String id : seatIds) {
-            int tag=0;
+            int tag = 0;
             for (String s : split) {
-                if(s.equals(id)) {
-                    tag=1;
+                if (s.equals(id)) {
+                    tag = 1;
                     break;
                 }
             }
-            if(tag==0)return false;
+            if (tag == 0) return false;
         }
         return true;
     }
+
     @Override
-    public Boolean isSoldSeats(int filedId, String seatId) throws Exception{
+    public Boolean isSoldSeats(int filedId, String seatId) throws Exception {
         String s = this.getSoldSeatsByFieldId(filedId);
 
         String[] seatIds = seatId.split(",");
         String[] soldSeatIds = s.split(",");
         for (String id : seatIds) {
             for (String soldSeatId : soldSeatIds) {
-                if(soldSeatId.equals(id))return true;
+                if (soldSeatId.equals(id)) return true;
             }
         }
         return false;
     }
 
     @Override
-    public ResponseOrderBo saveOrderInfo(int filedId, String soldSeats, String seatsName, UserBO userbo) throws Exception{
-        ResponseOrderBo responseOrderBo = new ResponseOrderBo();
-
-        //String cinamaName= cinamaservice.getNameByfiledId(filedId)
-        MtimeFieldT mtimeField=  mtimeFieldTMapper.searchByFiledId(filedId);
-        Integer cinemaId = mtimeField.getCinemaId();
-
-        //获取电影院名称
-        responseOrderBo.setCinemaName("电影院名称查询接口");
-
-
-        //可能需要拼接字符串
-        responseOrderBo.setFieldTime(mtimeField.getBeginTime());
-        Integer filmId = mtimeField.getFilmId();
-        //查询电影名称
-        responseOrderBo.setFilmName("电影名称查询接口");
+    public ResponseOrderVO saveOrderInfo(FilmMessageBO filmMessageBO, String seatsName) throws Exception {
+        ResponseOrderVO responseOrderVO = new ResponseOrderVO();
+        responseOrderVO.setCinemaName(filmMessageBO.getCinemaName());
+        responseOrderVO.setFilmName(filmMessageBO.getFilmName());
+        responseOrderVO.setFieldTime(filmMessageBO.getFieldTime());
         //设置orderId为uuid
         UUID uuid = UUID.randomUUID();
-        responseOrderBo.setOrderId( uuid.toString().replace("-",""));
-
-        //票的价格从哪拿？？是否需要计算总数
-         double perprice=  (double)mtimeField.getPrice();
-        int sum = soldSeats.split(",").length;
-        double sumprice=sum*perprice;
-        responseOrderBo.setOrderPrice(sumprice);
+        responseOrderVO.setOrderId(uuid.toString().replace("-", ""));
 
         //设置时间戳
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         Date date = new Date();
-        responseOrderBo.setOrderTimestamp( df.format(date));
+        responseOrderVO.setOrderTimestamp(df.format(date));
+        responseOrderVO.setOrderStatus("未支付");
+        responseOrderVO.setSeatsName(seatsName);
 
-        responseOrderBo.setOrderStatus("未支付");
-        responseOrderBo.setSeatsName(seatsName);
+        return responseOrderVO;
+    }
+
+    /**
+     * 添加订单
+     * @param filmMessageBO
+     * @return
+     */
+    @Override
+    public boolean addOrder(FilmMessageBO filmMessageBO, ResponseOrderVO responseOrderVO, String soldSeats, UserBO userbo) {
+
         MtimeOrderT mtimeOrderT = new MtimeOrderT();
-        mtimeOrderT.setUuid(uuid.toString());
-        mtimeOrderT.setCinemaId(mtimeField.getCinemaId());
-        mtimeOrderT.setFieldId(filedId);
-        mtimeOrderT.setFilmId(mtimeField.getFilmId());
+        mtimeOrderT.setUuid(responseOrderVO.getOrderId());
+        mtimeOrderT.setCinemaId(filmMessageBO.getCinemaId());
+        mtimeOrderT.setFieldId(filmMessageBO.getFieldId());
+        mtimeOrderT.setFilmId(filmMessageBO.getFilmId());
         mtimeOrderT.setSeatsIds(soldSeats);
-        mtimeOrderT.setSeatsName(seatsName);
-        mtimeOrderT.setFilmPrice(perprice);
+        mtimeOrderT.setSeatsName(responseOrderVO.getSeatsName());
+
+        //票的价格从哪拿？？是否需要计算总数
+        double price = filmMessageBO.getPrice();
+        int sum = soldSeats.split(",").length;
+        double sumprice = sum * filmMessageBO.getPrice();
+        responseOrderVO.setOrderPrice(sumprice);
+        mtimeOrderT.setFilmPrice(price);
         mtimeOrderT.setOrderPrice(sumprice);
-        mtimeOrderT.setOrderTime(date);
+
+        //设置时间戳
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        Date parse = null;
+        try {
+            parse = df.parse(responseOrderVO.getOrderTimestamp());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mtimeOrderT.setOrderTime(parse);
+
         mtimeOrderT.setOrderUser(userbo.getUuid());
         mtimeOrderT.setOrderStatus(0);
-        Integer insert = mtimeOrderTMapper.insert(mtimeOrderT);
-        return responseOrderBo;
+
+        return mtimeOrderTMapper.insert(mtimeOrderT) == 1;
     }
 
     @Override
-    public List<ResponseOrderBo> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception{
+    public List<ResponseOrderVO> getOrserVoByUserId(int userId, int nowPage, int pageSize) throws Exception {
         //需要分页！！！！！！！
-        List<ResponseOrderBo> responseOrderBos =mtimeOrderTMapper.searchResponseOrdersByUserId(userId);
-        for (ResponseOrderBo responseOrderBo : responseOrderBos) {
-            String orderStatus = responseOrderBo.getOrderStatus();
-            switch (orderStatus){
-                case "0" :{
-                    responseOrderBo.setOrderStatus("待支付");
+        List<ResponseOrderVO> responseOrderVOS = mtimeOrderTMapper.searchResponseOrdersByUserId(userId);
+        for (ResponseOrderVO responseOrderVO : responseOrderVOS) {
+            String orderStatus = responseOrderVO.getOrderStatus();
+            switch (orderStatus) {
+                case "0": {
+                    responseOrderVO.setOrderStatus("待支付");
                     break;
                 }
-                case "1" :{
-                    responseOrderBo.setOrderStatus("已支付");
+                case "1": {
+                    responseOrderVO.setOrderStatus("已支付");
                     break;
                 }
-                case "2" :{
-                    responseOrderBo.setOrderStatus("已关闭");
+                case "2": {
+                    responseOrderVO.setOrderStatus("已关闭");
                     break;
                 }
             }
         }
-        return responseOrderBos;
+        return responseOrderVOS;
     }
 
     @Override
     public String getSoldSeatsByFieldId(Integer filedId) {
-        List<String> saledSeats= mtimeOrderTMapper.selectSeatsIdsByfiledId(filedId);
+        List<String> saledSeats = mtimeOrderTMapper.selectSeatsIdsByfiledId(filedId);
         StringBuffer stringBuffer = new StringBuffer();
-        for (int i=0;i<saledSeats.size();i++) {
-            if(i==0)stringBuffer.append(saledSeats.get(i)+",");
-            else if(i==(saledSeats.size()-1))stringBuffer.append(saledSeats.get(i));
+        for (int i = 0; i < saledSeats.size(); i++) {
+            if (i == 0) stringBuffer.append(saledSeats.get(i) + ",");
+            else if (i == (saledSeats.size() - 1)) stringBuffer.append(saledSeats.get(i));
             else {
-                stringBuffer.append(saledSeats.get(i)+",");
+                stringBuffer.append(saledSeats.get(i) + ",");
             }
         }
 

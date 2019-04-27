@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.*;
+import com.stylefeng.guns.rest.persistence.model.bo.cinemabo.FilmMessageBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -119,5 +120,10 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public HallInfo findHallInfo(Integer fieldId) {
         return hallMapper.selectHallByFieldId(fieldId);
+    }
+
+    @Override
+    public FilmMessageBO findFilmMessageBO(int fieldId) {
+        return fieldMapper.selectFilmMessage(fieldId);
     }
 }

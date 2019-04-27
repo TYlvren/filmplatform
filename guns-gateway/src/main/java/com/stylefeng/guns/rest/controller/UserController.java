@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.persistence.model.bo.userbo.UserBO;
 import com.stylefeng.guns.rest.persistence.model.request.RequestUser;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("user")
 public class UserController {
 
-    //@Reference
+    @Reference
     UserService userService;
 
     /**

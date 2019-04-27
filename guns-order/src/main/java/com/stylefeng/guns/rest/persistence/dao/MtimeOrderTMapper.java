@@ -2,7 +2,7 @@ package com.stylefeng.guns.rest.persistence.dao;
 
 import com.stylefeng.guns.rest.persistence.model.MtimeOrderT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.stylefeng.guns.rest.persistence.model.bo.orderBo.ResponseOrderBo;
+import com.stylefeng.guns.rest.persistence.model.vo.orderVo.ResponseOrderVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface MtimeOrderTMapper extends BaseMapper<MtimeOrderT> {
 
     List<MtimeOrderT> searchOrdersByUserId(@Param("userId")int userId);
 
-    List<ResponseOrderBo> searchResponseOrdersByUserId(@Param("userId")int userId);
+    List<ResponseOrderVO> searchResponseOrdersByUserId(@Param("userId")int userId);
 
     double searchPriceByOrderId(@Param("orderId")String orderId);
 

@@ -1,7 +1,7 @@
 package com.stylefeng.guns.rest.persistence.dao;
 
-import com.stylefeng.guns.rest.persistence.model.MtimeFieldT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.persistence.model.MtimeFieldT;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -14,5 +14,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface MtimeFieldTMapper extends BaseMapper<MtimeFieldT> {
 
-    MtimeFieldT searchByFiledId(@Param("filedId")int filedId);
+    String selectSeatAddress(@Param("filedId")int filedId);
 }
